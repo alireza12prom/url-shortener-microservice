@@ -3,7 +3,7 @@ package entities
 import (
 	"time"
 
-	ValueObjects "github.com/alireza12prom/url-shortener-microservice/shortener-service/internal/account/domain/value-objects"
+	ValueObjects "github.com/shortener-service/internal/account/domain/value-objects"
 )
 
 type AccountEntity struct {

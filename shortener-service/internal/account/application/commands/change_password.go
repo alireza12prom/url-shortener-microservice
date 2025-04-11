@@ -1,8 +1,8 @@
 package commands
 
 import (
-	"github.com/alireza12prom/url-shortener-microservice/shortener-service/internal/account/application/dto"
-	"github.com/alireza12prom/url-shortener-microservice/shortener-service/internal/account/domain/repositories"
+	"github.com/shortener-service/internal/account/application/dto"
+	"github.com/shortener-service/internal/account/domain/repositories"
 )
 
 type ChangePasswordCommand struct {

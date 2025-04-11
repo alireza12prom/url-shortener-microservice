@@ -1,12 +1,12 @@
 package mappers
 
 import (
-	"github.com/alireza12prom/url-shortener-microservice/shortener-service/internal/account/dal/models"
-	entity "github.com/alireza12prom/url-shortener-microservice/shortener-service/internal/account/domain/Entity"
-	"github.com/alireza12prom/url-shortener-microservice/shortener-service/internal/account/domain/ValueObject"
+	"github.com/shortener-service/internal/account/dal/models"
+	"github.com/shortener-service/internal/account/domain/entities"
+	ValueObjects "github.com/shortener-service/internal/account/domain/value-objects"
 )
 
-func MapToAccountModel(e *entity.AccountEntity) *models.AccountModel {
+func MapToAccountModel(e *entities.AccountEntity) *models.AccountModel {
 	return &models.AccountModel{
 		ID:        e.ID.GetValue(),
 		Username:  e.Username.GetValue(),
@@ -17,13 +17,13 @@ func MapToAccountModel(e *entity.AccountEntity) *models.AccountModel {
 	}
 }
 
-func MapToAccountDomain(m *models.AccountModel) *entity.AccountEntity {
-	ID, _ := ValueObject.NewID(m.ID)
-	Username, _ := ValueObject.NewUsername(m.Username)
-	Email, _ := ValueObject.NewEmail(m.Email)
-	Password, _ := ValueObject.NewPassword(m.Password)
+func MapToAccountDomain(m *models.AccountModel) *entities.AccountEntity {
+	ID, _ := ValueObjects.NewID(m.ID)
+	Username, _ := ValueObjects.NewUsername(m.Username)
+	Email, _ := ValueObjects.NewEmail(m.Email)
+	Password, _ := ValueObjects.NewPassword(m.Password)
 
-	return &entity.AccountEntity{
+	return &entities.AccountEntity{
 		ID:        ID,
 		Username:  Username,
 		Email:     Email,

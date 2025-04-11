@@ -1,9 +1,9 @@
 package http
 
 import (
-	"github.com/alireza12prom/url-shortener-microservice/shortener-service/internal/account/application/commands"
-	"github.com/alireza12prom/url-shortener-microservice/shortener-service/internal/account/application/queries"
 	"github.com/gin-gonic/gin"
+	"github.com/shortener-service/internal/account/application/commands"
+	"github.com/shortener-service/internal/account/application/queries"
 )
 
 type Handler struct {
