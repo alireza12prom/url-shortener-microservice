@@ -4,10 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes(engine *gin.Engine) {
-	handler := Handler{}
+func SetupAccountRoutes(engine *gin.Engine, handler *AccountHandler) {
+	router := engine.Group("/api/v1/account")
 
-	router := engine.Group("/account")
 	{
 		router.POST("/", handler.RegisterAccount)
 		router.POST("/password.change", handler.ChangePassword)
