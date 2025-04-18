@@ -3,24 +3,83 @@ package http
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/shortener-service/internal/account/application/commands"
+	"github.com/shortener-service/internal/account/application/dto"
 	"github.com/shortener-service/internal/account/application/queries"
+	"github.com/shortener-service/internal/account/domain/interfaces"
 )
 
-type Handler struct {
-	RegisterAccountCmd *commands.RegisterAccountCommand
-	ChangePasswordCmd  *commands.ChangePasswordCommand
-	ChangeUsernameCmd  *commands.ChangeUsernameCommand
-	GetAccountQr       *queries.GetAccountQuery
+type AccountHandler struct {
+	AccountService interfaces.AccountService
 }
 
-func (h *Handler) RegisterAccount(ctx *gin.Context) {
+func (h *AccountHandler) RegisterAccount(ctx *gin.Context) {
+	var input dto.RegisterAccountInput
+
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(400, gin.H{"error": "Invalid input"})
+		return
+	}
+
+	command := commands.NewRegisterAccountCommand(&input)
+	result, err := h.AccountService.RegisterAccount(&command)
+	if err != nil {
+		ctx.JSON(500, gin.H{"error": "Failed to register account"})
+		return
+	}
+
+	ctx.JSON(200, gin.H{"result": result})
 }
 
-func (h *Handler) ChangePassword(ctx *gin.Context) {
+func (h *AccountHandler) ChangePassword(ctx *gin.Context) {
+	var input dto.ChangePasswordInput
+
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(400, gin.H{"error": "Invalid input"})
+		return
+	}
+
+	command := commands.NewChangePasswordCommand(&input)
+	result, err := h.AccountService.ChangePassword(&command)
+	if err != nil {
+		ctx.JSON(500, gin.H{"error": "Failed to change password"})
+		return
+	}
+
+	ctx.JSON(200, gin.H{"result": result})
 }
 
-func (h *Handler) ChangeUsername(ctx *gin.Context) {
+func (h *AccountHandler) ChangeUsername(ctx *gin.Context) {
+	var input dto.ChangeUsernameInput
+
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(400, gin.H{"error": "Invalid input"})
+		return
+	}
+
+	command := commands.NewChangeUsernameCommand(&input)
+	result, err := h.AccountService.ChangeUsername(&command)
+	if err != nil {
+		ctx.JSON(500, gin.H{"error": "Failed to change username"})
+		return
+	}
+
+	ctx.JSON(200, gin.H{"result": result})
 }
 
-func (h *Handler) GetAccount(ctx *gin.Context) {
+func (h *AccountHandler) GetAccount(ctx *gin.Context) {
+	var input dto.GetAccountInput
+
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(400, gin.H{"error": "Invalid input"})
+		return
+	}
+
+	query := queries.NewGetAccountQuery(&input)
+	result, err := h.AccountService.GetAccount(&query)
+	if err != nil {
+		ctx.JSON(500, gin.H{"error": "Failed to get account"})
+		return
+	}
+
+	ctx.JSON(200, gin.H{"result": result})
 }

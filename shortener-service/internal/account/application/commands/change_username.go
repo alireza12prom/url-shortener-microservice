@@ -1,20 +1,17 @@
 package commands
 
-import (
-	"github.com/shortener-service/internal/account/application/dto"
-	"github.com/shortener-service/internal/account/domain/repositories"
-)
+import "github.com/shortener-service/internal/account/application/dto"
 
 type ChangeUsernameCommand struct {
-	AccountRepository *repositories.AccountRepository
+	UserID   string
+	Username string
 }
 
-func NewChangeUsernameCommand(accountRepository *repositories.AccountRepository) *ChangeUsernameCommand {
-	return &ChangeUsernameCommand{
-		AccountRepository: accountRepository,
+func NewChangeUsernameCommand(input *dto.ChangeUsernameInput) ChangeUsernameCommand {
+	return ChangeUsernameCommand{
+		UserID:   input.UserID,
+		Username: input.Username,
 	}
 }
 
-func (command *ChangeUsernameCommand) Execute(input dto.ChangeUsernameInput) (*dto.ChangeUsernameOutput, error) {
-	return nil, nil
-}
+type ChangeUsernameCommandOutput struct{}

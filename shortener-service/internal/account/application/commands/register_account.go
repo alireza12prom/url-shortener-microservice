@@ -1,20 +1,24 @@
 package commands
 
-import (
-	"github.com/shortener-service/internal/account/application/dto"
-	"github.com/shortener-service/internal/account/domain/repositories"
-)
+import "github.com/shortener-service/internal/account/application/dto"
 
 type RegisterAccountCommand struct {
-	AccountRepository *repositories.AccountRepository
+	Name     string
+	Email    string
+	Password string
+	Username string
 }
 
-func NewRegisterAccountCommand(accountRepository *repositories.AccountRepository) *RegisterAccountCommand {
-	return &RegisterAccountCommand{
-		AccountRepository: accountRepository,
+func NewRegisterAccountCommand(input *dto.RegisterAccountInput) RegisterAccountCommand {
+	return RegisterAccountCommand{
+		Name:     input.Name,
+		Email:    input.Email,
+		Password: input.Password,
+		Username: input.Username,
 	}
 }
 
-func (command *RegisterAccountCommand) Execute(input dto.RegisterAccountInput) (*dto.RegisterAccountOutput, error) {
-	return nil, nil
+type RegisterAccountCommandResult struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
 }

@@ -1,12 +1,8 @@
 package dto
 
 type RegisterAccountInput struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-type RegisterAccountOutput struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
+	Name     string `json:"name" binding:"required,min=3"`
+	Email    string `json:"email" binding:"required,email"`
+	Username string `json:"username" binding:"required,min=3,max=15,alphanum"`
+	Password string `json:"password" binding:"required,min=5,max=15,alphanum"`
 }

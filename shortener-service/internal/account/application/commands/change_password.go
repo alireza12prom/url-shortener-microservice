@@ -1,20 +1,19 @@
 package commands
 
-import (
-	"github.com/shortener-service/internal/account/application/dto"
-	"github.com/shortener-service/internal/account/domain/repositories"
-)
+import "github.com/shortener-service/internal/account/application/dto"
 
 type ChangePasswordCommand struct {
-	AccountRepository *repositories.AccountRepository
+	UserID      string
+	NewPassword string
+	OldPassword string
 }
 
-func NewUpdateAccountCommand(accountRepository *repositories.AccountRepository) *ChangePasswordCommand {
-	return &ChangePasswordCommand{
-		AccountRepository: accountRepository,
+func NewChangePasswordCommand(input *dto.ChangePasswordInput) ChangePasswordCommand {
+	return ChangePasswordCommand{
+		UserID:      input.UserID,
+		NewPassword: input.NewPassword,
+		OldPassword: input.OldPassword,
 	}
 }
 
-func (command *ChangePasswordCommand) Execute(input dto.ChangePasswordInput) (*dto.ChangePasswordOutput, error) {
-	return nil, nil
-}
+type ChangePasswordCommandOutput struct{}

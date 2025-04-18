@@ -1,20 +1,21 @@
 package queries
 
-import (
-	"github.com/shortener-service/internal/account/application/dto"
-	"github.com/shortener-service/internal/account/domain/repositories"
-)
+import "github.com/shortener-service/internal/account/application/dto"
 
 type GetAccountQuery struct {
-	AccountRepository *repositories.AccountRepository
+	UserID string
 }
 
-func NewGetAccountQuery(accountRepository *repositories.AccountRepository) *GetAccountQuery {
-	return &GetAccountQuery{
-		AccountRepository: accountRepository,
+func NewGetAccountQuery(input *dto.GetAccountInput) GetAccountQuery {
+	return GetAccountQuery{
+		UserID: input.UserID,
 	}
 }
 
-func (query *GetAccountQuery) Execute(input dto.GetAccountInput) (*dto.GetAccountOutput, error) {
-	return nil, nil
+type GetAccountQueryResult struct {
+	ID        string
+	Username  string
+	Email     string
+	CreatedAt string
+	UpdatedAt string
 }
