@@ -1,0 +1,13 @@
+
+version: '3'
+services:
+  db:
+    image: scylladb/scylla
+    container_name: scylladb
+    ports:
+      - "9042:9042"
+    volumes:
+      - scylla_data:/var/lib/scylla
+      - ./shortener-service/internal/infrastructure/scylladb/init.cql:/init.cql
+volumes:
+  scylla_data:
