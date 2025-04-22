@@ -14,6 +14,4 @@ func SetupAccountRoutes(engine *gin.Engine, handler *AccountHandler) {
 
 		router.GET("/", handler.GetAccount)
 	}
-
-	println("Account -> routes registered")
 }
