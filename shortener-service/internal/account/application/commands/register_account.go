@@ -19,6 +19,5 @@ func NewRegisterAccountCommand(input *dto.RegisterAccountInput) RegisterAccountC
 }
 
 type RegisterAccountCommandResult struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
+	Token string `json:"token"`
 }
