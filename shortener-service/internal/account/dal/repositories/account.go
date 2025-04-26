@@ -19,11 +19,11 @@ func NewAccountRepository(connection *scylladb.ScyllaDB) *AccountRepository {
 }
 
 func (r *AccountRepository) Save(account *entities.AccountEntity) error {
-	query := "INSERT INTO account (id, username, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)"
+	query := "INSERT INTO account (id, username, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?)"
 
 	model := mappers.MapToAccountModel(account)
 
-	err := r.connection.Session.Query(query, model.ID, model.Username, model.Email, model.Password, model.CreatedAt, model.UpdatedAt).Exec()
+	err := r.connection.Session.Query(query, model.ID, model.Username, model.Password, model.CreatedAt, model.UpdatedAt).Exec()
 	if err != nil {
 		return err
 	}
@@ -32,13 +32,12 @@ func (r *AccountRepository) Save(account *entities.AccountEntity) error {
 }
 
 func (r *AccountRepository) GetByUserId(userId string) (*entities.AccountEntity, error) {
-	query := "SELECT id, username, email, password, created_at, updated_at FROM account WHERE id = ?"
+	query := "SELECT id, username, password, created_at, updated_at FROM account WHERE id = ?"
 
 	var result models.AccountModel
 	err := r.connection.Session.Query(query, userId).Consistency(gocql.One).Scan(
 		&result.ID,
 		&result.Username,
-		&result.Email,
 		&result.Password,
 		&result.CreatedAt,
 		&result.UpdatedAt,

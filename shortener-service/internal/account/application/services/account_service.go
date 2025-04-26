@@ -35,21 +35,10 @@ func (s *AccountService) RegisterAccount(command *commands.RegisterAccountComman
 		return nil, errors.New("username is not unique")
 	}
 
-	// check "email" is unique
-	isEmailUnique, err := s.accountRepo.IsEmailUnique(command.Email)
-	if err != nil {
-		return nil, err
-	}
-
-	if !isEmailUnique {
-		return nil, errors.New("email is not unique")
-	}
-
 	// create a new account
 	entity, err := entities.NewAccount(
 		uuid.New().String(),
 		command.Username,
-		command.Email,
 		command.Password,
 	)
 	if err != nil {
@@ -138,7 +127,6 @@ func (s *AccountService) GetAccount(query *queries.GetAccountQuery) (
 
 	return &queries.GetAccountQueryResult{
 		ID:        account.ID.GetValue(),
-		Email:     account.Email.GetValue(),
 		Username:  account.Username.GetValue(),
 		CreatedAt: account.CreatedAt.String(),
 		UpdatedAt: account.UpdatedAt.String(),
