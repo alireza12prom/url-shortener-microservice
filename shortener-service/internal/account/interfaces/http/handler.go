@@ -68,11 +68,8 @@ func (h *AccountHandler) ChangeUsername(ctx *gin.Context) {
 
 func (h *AccountHandler) GetAccount(ctx *gin.Context) {
 	var input dto.GetAccountInput
-
-	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(400, gin.H{"error": "Invalid input"})
-		return
-	}
+	userId, _ := ctx.Get("userId")
+	input.UserID = userId.(string)
 
 	query := queries.NewGetAccountQuery(&input)
 	result, err := h.AccountService.GetAccount(&query)

@@ -1,7 +1,6 @@
 package jwt
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -30,17 +29,25 @@ func GenerateToken(userId string) (string, error) {
 	return tokenString, nil
 }
 
-func VerifyToken(token string) error {
+func Verify(token string) bool {
+	t, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+		return []byte(JWT_SECRET), nil
+	})
+	if err != nil || !t.Valid {
+		return false
+	}
+
+	return true
+}
+
+func Extract(token string) (jwt.MapClaims, error) {
 	t, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
 		return []byte(JWT_SECRET), nil
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	if !t.Valid {
-		return fmt.Errorf("invalid token")
-	}
-
-	return nil
+	claims := t.Claims.(jwt.MapClaims)
+	return claims, nil
 }

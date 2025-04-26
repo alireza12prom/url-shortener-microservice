@@ -32,10 +32,17 @@ func (r *AccountRepository) Save(account *entities.AccountEntity) error {
 }
 
 func (r *AccountRepository) GetByUserId(userId string) (*entities.AccountEntity, error) {
-	query := "SELECT * FROM users WHERE id = ? LIMIT 1"
+	query := "SELECT id, username, email, password, created_at, updated_at FROM account WHERE id = ?"
 
 	var result models.AccountModel
-	err := r.connection.Session.Query(query, userId).Consistency(gocql.One).Scan(&result)
+	err := r.connection.Session.Query(query, userId).Consistency(gocql.One).Scan(
+		&result.ID,
+		&result.Username,
+		&result.Email,
+		&result.Password,
+		&result.CreatedAt,
+		&result.UpdatedAt,
+	)
 	if err != nil {
 		return nil, err
 	}
