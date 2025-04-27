@@ -23,7 +23,25 @@ func (h *AccountHandler) RegisterAccount(ctx *gin.Context) {
 	command := commands.NewRegisterAccountCommand(&input)
 	result, err := h.AccountService.RegisterAccount(&command)
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": "Failed to register account"})
+		ctx.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(200, gin.H{"result": result})
+}
+
+func (h *AccountHandler) LoginAccount(ctx *gin.Context) {
+	var input dto.LoginAccountInput
+
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(400, gin.H{"error": "Invalid input"})
+		return
+	}
+
+	command := commands.NewLoginAccountCommand(&input)
+	result, err := h.AccountService.LoginAccount(&command)
+	if err != nil {
+		ctx.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
 

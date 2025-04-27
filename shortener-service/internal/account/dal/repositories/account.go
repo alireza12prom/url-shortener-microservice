@@ -19,11 +19,11 @@ func NewAccountRepository(connection *scylladb.ScyllaDB) *AccountRepository {
 }
 
 func (r *AccountRepository) Save(account *entities.AccountEntity) error {
-	query := "INSERT INTO account (id, username, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?)"
+	query := "INSERT INTO account (id, name, username, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)"
 
 	model := mappers.MapToAccountModel(account)
 
-	err := r.connection.Session.Query(query, model.ID, model.Username, model.Password, model.CreatedAt, model.UpdatedAt).Exec()
+	err := r.connection.Session.Query(query, model.ID, model.Name, model.Username, model.Password, model.CreatedAt, model.UpdatedAt).Exec()
 	if err != nil {
 		return err
 	}
@@ -32,11 +32,12 @@ func (r *AccountRepository) Save(account *entities.AccountEntity) error {
 }
 
 func (r *AccountRepository) GetByUserId(userId string) (*entities.AccountEntity, error) {
-	query := "SELECT id, username, password, created_at, updated_at FROM account WHERE id = ?"
+	query := "SELECT id, name, username, password, created_at, updated_at FROM account WHERE id = ?"
 
 	var result models.AccountModel
 	err := r.connection.Session.Query(query, userId).Consistency(gocql.One).Scan(
 		&result.ID,
+		&result.Name,
 		&result.Username,
 		&result.Password,
 		&result.CreatedAt,
@@ -49,25 +50,37 @@ func (r *AccountRepository) GetByUserId(userId string) (*entities.AccountEntity,
 	return mappers.MapToAccountDomain(&result), nil
 }
 
-func (r *AccountRepository) IsEmailUnique(email string) (bool, error) {
-	query := "SELECT COUNT(*) FROM account_by_email WHERE email = ? LIMIT 1"
+func (r *AccountRepository) GetByUsername(username string) (
+	*entities.AccountEntity,
+	error,
+) {
+	query := "SELECT id, name, username, password, created_at, updated_at FROM account_by_username WHERE username = ?"
 
-	var result int
-
-	err := r.connection.Session.Query(query, email).Consistency(gocql.One).Scan(&result)
+	var result models.AccountModel
+	err := r.connection.Session.Query(query, username).Consistency(gocql.One).Scan(
+		&result.ID,
+		&result.Name,
+		&result.Username,
+		&result.Password,
+		&result.CreatedAt,
+		&result.UpdatedAt,
+	)
+	if err == gocql.ErrNotFound {
+		return nil, nil
+	}
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
-	return result == 0, nil
+	return mappers.MapToAccountDomain(&result), nil
 }
 
-func (r *AccountRepository) IsUsernameUnique(email string) (bool, error) {
+func (r *AccountRepository) IsUsernameUnique(username string) (bool, error) {
 	query := "SELECT COUNT(*) FROM account_by_username WHERE username = ? LIMIT 1"
 
 	var result int
 
-	err := r.connection.Session.Query(query, email).Consistency(gocql.One).Scan(&result)
+	err := r.connection.Session.Query(query, username).Consistency(gocql.One).Scan(&result)
 	if err != nil {
 		return false, err
 	}

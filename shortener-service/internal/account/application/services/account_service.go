@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/shortener-service/internal/account/application/commands"
@@ -38,6 +39,7 @@ func (s *AccountService) RegisterAccount(command *commands.RegisterAccountComman
 	// create a new account
 	entity, err := entities.NewAccount(
 		uuid.New().String(),
+		command.Name,
 		command.Username,
 		command.Password,
 	)
@@ -50,12 +52,39 @@ func (s *AccountService) RegisterAccount(command *commands.RegisterAccountComman
 		return nil, err
 	}
 
-	token, err := jwt.GenerateToken(entity.ID.GetValue())
+	return &commands.RegisterAccountCommandResult{
+		ID:        entity.ID.GetValue(),
+		Name:      entity.Name,
+		Username:  entity.Username.GetValue(),
+		CreatedAt: entity.CreatedAt.UTC().Format(time.RFC3339),
+		UpdatedAt: entity.UpdatedAt.UTC().Format(time.RFC3339),
+	}, nil
+}
+
+func (s *AccountService) LoginAccount(command *commands.LoginAccountCommand) (
+	*commands.LoginAccountCommandResult,
+	error,
+) {
+	account, err := s.accountRepo.GetByUsername(command.Username)
 	if err != nil {
 		return nil, err
 	}
 
-	return &commands.RegisterAccountCommandResult{
+	if account == nil {
+		return nil, errors.New("username not found")
+	}
+
+	isPasswordMatch := account.Password.Compare(command.Password)
+	if !isPasswordMatch {
+		return nil, errors.New("password is not match")
+	}
+
+	token, err := jwt.GenerateToken(account.ID.GetValue())
+	if err != nil {
+		return nil, errors.New("login failed")
+	}
+
+	return &commands.LoginAccountCommandResult{
 		Token: token,
 	}, nil
 }
@@ -69,11 +98,7 @@ func (s *AccountService) ChangePassword(command *commands.ChangePasswordCommand)
 		return nil, err
 	}
 
-	isPasswordMatch, err := account.Password.Compare(command.OldPassword)
-	if err != nil {
-		return nil, err
-	}
-
+	isPasswordMatch := account.Password.Compare(command.OldPassword)
 	if !isPasswordMatch {
 		return nil, errors.New("'old_password' isn't match")
 	}

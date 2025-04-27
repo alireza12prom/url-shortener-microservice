@@ -5,6 +5,7 @@ USE shortener;
 
 CREATE TABLE IF NOT EXISTS account (
   id UUID,
+  name VARCHAR,
   username VARCHAR,
   password VARCHAR,
   created_at TIMESTAMP,

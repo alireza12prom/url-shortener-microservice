@@ -9,6 +9,7 @@ import (
 func MapToAccountModel(e *entities.AccountEntity) *models.AccountModel {
 	return &models.AccountModel{
 		ID:        e.ID.GetValue(),
+		Name:      e.Name,
 		Username:  e.Username.GetValue(),
 		Password:  e.Password.GetValue(),
 		CreatedAt: e.CreatedAt,
@@ -19,10 +20,11 @@ func MapToAccountModel(e *entities.AccountEntity) *models.AccountModel {
 func MapToAccountDomain(m *models.AccountModel) *entities.AccountEntity {
 	ID, _ := ValueObjects.NewID(m.ID)
 	Username, _ := ValueObjects.NewUsername(m.Username)
-	Password, _ := ValueObjects.NewPassword(m.Password)
+	Password := ValueObjects.NewHashedPassword(m.Password)
 
 	return &entities.AccountEntity{
 		ID:        ID,
+		Name:      m.Name,
 		Username:  Username,
 		Password:  Password,
 		CreatedAt: m.CreatedAt,

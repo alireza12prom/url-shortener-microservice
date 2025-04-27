@@ -1,6 +1,8 @@
 package commands
 
-import "github.com/shortener-service/internal/account/application/dto"
+import (
+	"github.com/shortener-service/internal/account/application/dto"
+)
 
 type RegisterAccountCommand struct {
 	Name     string
@@ -17,5 +19,9 @@ func NewRegisterAccountCommand(input *dto.RegisterAccountInput) RegisterAccountC
 }
 
 type RegisterAccountCommandResult struct {
-	Token string `json:"token"`
+	ID        string
+	Name      string
+	Username  string
+	CreatedAt string
+	UpdatedAt string
 }

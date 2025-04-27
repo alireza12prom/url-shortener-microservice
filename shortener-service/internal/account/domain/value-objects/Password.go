@@ -1,29 +1,35 @@
 package ValueObjects
 
-import "strings"
+import (
+	"golang.org/x/crypto/bcrypt"
+)
 
 type Password struct {
 	value string
 }
 
 func NewPassword(value string) (*Password, error) {
-	// TODO: Check if password has the requirement
+	bytes, err := bcrypt.GenerateFromPassword([]byte(value), 14)
+	if err != nil {
+		return nil, err
+	}
 
 	return &Password{
-		value: strings.ToLower(value),
+		value: string(bytes),
 	}, nil
 }
 
-func (id *Password) GetValue() string {
-	return id.value
+func NewHashedPassword(value string) *Password {
+	return &Password{
+		value: value,
+	}
 }
 
-func (password *Password) CreateHash() (string, error) {
-	// TODO: Implement
-	return "xxxx", nil
+func (p *Password) GetValue() string {
+	return p.value
 }
 
-func (password *Password) Compare(value string) (bool, error) {
-	// TODO: Implement
-	return true, nil
+func (p *Password) Compare(value string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(p.value), []byte(value))
+	return err == nil
 }

@@ -8,13 +8,14 @@ import (
 
 type AccountEntity struct {
 	ID        *ValueObjects.ID
+	Name      string
 	Username  *ValueObjects.Username
 	Password  *ValueObjects.Password
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
-func NewAccount(id, username, password string) (*AccountEntity, error) {
+func NewAccount(id, name, username, password string) (*AccountEntity, error) {
 	ID, err := ValueObjects.NewID(id)
 	if err != nil {
 		return nil, err
@@ -32,6 +33,7 @@ func NewAccount(id, username, password string) (*AccountEntity, error) {
 
 	return &AccountEntity{
 		ID:        ID,
+		Name:      name,
 		Username:  Username,
 		Password:  Password,
 		CreatedAt: time.Now(),

@@ -10,7 +10,9 @@ func SetupAccountRoutes(engine *gin.Engine, handler *AccountHandler) {
 
 	{
 		router := base.Group("/")
+
 		router.POST("/register", handler.RegisterAccount)
+		router.POST("/login", handler.LoginAccount)
 	}
 
 	{
