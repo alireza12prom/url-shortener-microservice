@@ -15,7 +15,6 @@ func NewGetAccountQuery(input *dto.GetAccountInput) GetAccountQuery {
 type GetAccountQueryResult struct {
 	ID        string
 	Username  string
-	Email     string
 	CreatedAt string
 	UpdatedAt string
 }
