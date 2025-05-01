@@ -6,6 +6,7 @@ import (
 	"github.com/shortener-service/internal/account/application/dto"
 	"github.com/shortener-service/internal/account/application/queries"
 	"github.com/shortener-service/internal/account/domain/interfaces"
+	exceptions "github.com/shortener-service/internal/common/exceptions"
 )
 
 type AccountHandler struct {
@@ -34,14 +35,15 @@ func (h *AccountHandler) LoginAccount(ctx *gin.Context) {
 	var input dto.LoginAccountInput
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(400, gin.H{"error": "Invalid input"})
+		exception := exceptions.NewBusinessException(exceptions.ValidationFailed, nil)
+		ctx.Error(exception)
 		return
 	}
 
 	command := commands.NewLoginAccountCommand(&input)
 	result, err := h.AccountService.LoginAccount(&command)
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": err.Error()})
+		ctx.Error(err)
 		return
 	}
 
@@ -52,14 +54,15 @@ func (h *AccountHandler) ChangePassword(ctx *gin.Context) {
 	var input dto.ChangePasswordInput
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(400, gin.H{"error": "Invalid input"})
+		exception := exceptions.NewBusinessException(exceptions.ValidationFailed, nil)
+		ctx.Error(exception)
 		return
 	}
 
 	command := commands.NewChangePasswordCommand(&input)
 	result, err := h.AccountService.ChangePassword(&command)
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": "Failed to change password"})
+		ctx.Error(err)
 		return
 	}
 
@@ -70,14 +73,15 @@ func (h *AccountHandler) ChangeUsername(ctx *gin.Context) {
 	var input dto.ChangeUsernameInput
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(400, gin.H{"error": "Invalid input"})
+		exception := exceptions.NewBusinessException(exceptions.ValidationFailed, nil)
+		ctx.Error(exception)
 		return
 	}
 
 	command := commands.NewChangeUsernameCommand(&input)
 	result, err := h.AccountService.ChangeUsername(&command)
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": "Failed to change username"})
+		ctx.Error(err)
 		return
 	}
 
@@ -92,7 +96,7 @@ func (h *AccountHandler) GetAccount(ctx *gin.Context) {
 	query := queries.NewGetAccountQuery(&input)
 	result, err := h.AccountService.GetAccount(&query)
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": "Failed to get account"})
+		ctx.Error(err)
 		return
 	}
 

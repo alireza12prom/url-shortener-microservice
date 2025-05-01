@@ -5,6 +5,7 @@ import (
 	"github.com/shortener-service/internal/account/dal/mappers"
 	"github.com/shortener-service/internal/account/dal/models"
 	"github.com/shortener-service/internal/account/domain/entities"
+	exceptions "github.com/shortener-service/internal/common/exceptions"
 	"github.com/shortener-service/internal/infrastructure/scylladb"
 )
 
@@ -25,13 +26,16 @@ func (r *AccountRepository) Save(account *entities.AccountEntity) error {
 
 	err := r.connection.Session.Query(query, model.ID, model.Name, model.Username, model.Password, model.CreatedAt, model.UpdatedAt).Exec()
 	if err != nil {
-		return err
+		return exceptions.NewDatabaseException(err)
 	}
 
 	return nil
 }
 
-func (r *AccountRepository) GetByUserId(userId string) (*entities.AccountEntity, error) {
+func (r *AccountRepository) GetByUserId(userId string) (
+	*entities.AccountEntity,
+	error,
+) {
 	query := "SELECT id, name, username, password, created_at, updated_at FROM account WHERE id = ?"
 
 	var result models.AccountModel
@@ -44,7 +48,7 @@ func (r *AccountRepository) GetByUserId(userId string) (*entities.AccountEntity,
 		&result.UpdatedAt,
 	)
 	if err != nil {
-		return nil, err
+		return nil, exceptions.NewDatabaseException(err)
 	}
 
 	return mappers.MapToAccountDomain(&result), nil
@@ -69,20 +73,23 @@ func (r *AccountRepository) GetByUsername(username string) (
 		return nil, nil
 	}
 	if err != nil {
-		return nil, err
+		return nil, exceptions.NewDatabaseException(err)
 	}
 
 	return mappers.MapToAccountDomain(&result), nil
 }
 
-func (r *AccountRepository) IsUsernameUnique(username string) (bool, error) {
+func (r *AccountRepository) IsUsernameUnique(username string) (
+	bool,
+	error,
+) {
 	query := "SELECT COUNT(*) FROM account_by_username WHERE username = ? LIMIT 1"
 
 	var result int
 
 	err := r.connection.Session.Query(query, username).Consistency(gocql.One).Scan(&result)
 	if err != nil {
-		return false, err
+		return false, exceptions.NewDatabaseException(err)
 	}
 
 	return result == 0, nil

@@ -1,7 +1,6 @@
 package services
 
 import (
-	"errors"
 	"time"
 
 	"github.com/google/uuid"
@@ -9,6 +8,7 @@ import (
 	"github.com/shortener-service/internal/account/application/queries"
 	"github.com/shortener-service/internal/account/domain/entities"
 	"github.com/shortener-service/internal/account/domain/interfaces"
+	exceptions "github.com/shortener-service/internal/common/exceptions"
 	"github.com/shortener-service/internal/infrastructure/jwt"
 )
 
@@ -33,7 +33,7 @@ func (s *AccountService) RegisterAccount(command *commands.RegisterAccountComman
 	}
 
 	if !isUsernameUnique {
-		return nil, errors.New("username is not unique")
+		return nil, exceptions.NewBusinessException(exceptions.UsernameAlreadyTaken, nil)
 	}
 
 	// create a new account
@@ -71,17 +71,17 @@ func (s *AccountService) LoginAccount(command *commands.LoginAccountCommand) (
 	}
 
 	if account == nil {
-		return nil, errors.New("username not found")
+		return nil, exceptions.NewBusinessException(exceptions.WrongAuthenticationPack, nil)
 	}
 
 	isPasswordMatch := account.Password.Compare(command.Password)
 	if !isPasswordMatch {
-		return nil, errors.New("password is not match")
+		return nil, exceptions.NewBusinessException(exceptions.WrongAuthenticationPack, nil)
 	}
 
 	token, err := jwt.GenerateToken(account.ID.GetValue())
 	if err != nil {
-		return nil, errors.New("login failed")
+		return nil, exceptions.NewBusinessException(exceptions.LoginFailed, nil)
 	}
 
 	return &commands.LoginAccountCommandResult{
@@ -100,7 +100,7 @@ func (s *AccountService) ChangePassword(command *commands.ChangePasswordCommand)
 
 	isPasswordMatch := account.Password.Compare(command.OldPassword)
 	if !isPasswordMatch {
-		return nil, errors.New("'old_password' isn't match")
+		return nil, exceptions.NewBusinessException(exceptions.WrongPasswordProvided, nil)
 	}
 
 	account.UpdatePassword(command.NewPassword)
@@ -123,7 +123,7 @@ func (s *AccountService) ChangeUsername(command *commands.ChangeUsernameCommand)
 	}
 
 	if !isUsernameUnique {
-		return nil, errors.New("username has already taken")
+		return nil, exceptions.NewBusinessException(exceptions.UsernameAlreadyTaken, nil)
 	}
 
 	account, err := s.accountRepo.GetByUserId(command.UserID)

@@ -7,6 +7,7 @@ import (
 
 func SetupAccountRoutes(engine *gin.Engine, handler *AccountHandler) {
 	base := engine.Group("/api/v1/account")
+	base.Use(middlewares.ErrorHandlerMiddleware())
 
 	{
 		router := base.Group("/")
