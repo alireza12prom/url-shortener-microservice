@@ -1,6 +1,16 @@
 
-version: '3'
 services:
+  shortener_service:
+    depends_on:
+      - db
+    build:
+      context: ./shortener-service
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - db_net
+    
   db:
     image: scylladb/scylla
     container_name: scylladb
@@ -9,5 +19,11 @@ services:
     volumes:
       - scylla_data:/var/lib/scylla
       - ./shortener-service/internal/infrastructure/scylladb/init.cql:/init.cql
+    networks:
+      - db_net
+
 volumes:
   scylla_data:
+
+networks:
+  db_net:
