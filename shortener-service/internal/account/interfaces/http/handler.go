@@ -17,7 +17,11 @@ func (h *AccountHandler) RegisterAccount(ctx *gin.Context) {
 	var input dto.RegisterAccountInput
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(400, gin.H{"error": "Invalid input"})
+		exception := exceptions.NewBusinessException(
+			exceptions.ValidationFailed,
+			map[string]any{"detail": err.Error()},
+		)
+		ctx.Error(exception)
 		return
 	}
 
@@ -35,7 +39,10 @@ func (h *AccountHandler) LoginAccount(ctx *gin.Context) {
 	var input dto.LoginAccountInput
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		exception := exceptions.NewBusinessException(exceptions.ValidationFailed, nil)
+		exception := exceptions.NewBusinessException(
+			exceptions.ValidationFailed,
+			map[string]any{"detail": err.Error()},
+		)
 		ctx.Error(exception)
 		return
 	}
@@ -54,7 +61,10 @@ func (h *AccountHandler) ChangePassword(ctx *gin.Context) {
 	var input dto.ChangePasswordInput
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		exception := exceptions.NewBusinessException(exceptions.ValidationFailed, nil)
+		exception := exceptions.NewBusinessException(
+			exceptions.ValidationFailed,
+			map[string]any{"detail": err.Error()},
+		)
 		ctx.Error(exception)
 		return
 	}
@@ -73,7 +83,10 @@ func (h *AccountHandler) ChangeUsername(ctx *gin.Context) {
 	var input dto.ChangeUsernameInput
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		exception := exceptions.NewBusinessException(exceptions.ValidationFailed, nil)
+		exception := exceptions.NewBusinessException(
+			exceptions.ValidationFailed,
+			map[string]any{"detail": err.Error()},
+		)
 		ctx.Error(exception)
 		return
 	}
