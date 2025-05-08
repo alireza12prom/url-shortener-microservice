@@ -1,16 +1,14 @@
 package commands
 
-import "github.com/shortener-service/internal/account/application/dto"
-
 type ChangeUsernameCommand struct {
 	UserID   string
 	Username string
 }
 
-func NewChangeUsernameCommand(input *dto.ChangeUsernameInput) ChangeUsernameCommand {
+func NewChangeUsernameCommand(userId, username string) ChangeUsernameCommand {
 	return ChangeUsernameCommand{
-		UserID:   input.UserID,
-		Username: input.Username,
+		UserID:   userId,
+		Username: username,
 	}
 }
 

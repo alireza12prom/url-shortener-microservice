@@ -1,18 +1,16 @@
 package commands
 
-import "github.com/shortener-service/internal/account/application/dto"
-
 type ChangePasswordCommand struct {
 	UserID      string
 	NewPassword string
 	OldPassword string
 }
 
-func NewChangePasswordCommand(input *dto.ChangePasswordInput) ChangePasswordCommand {
+func NewChangePasswordCommand(userId, newPassword, oldPassword string) ChangePasswordCommand {
 	return ChangePasswordCommand{
-		UserID:      input.UserID,
-		NewPassword: input.NewPassword,
-		OldPassword: input.OldPassword,
+		UserID:      userId,
+		NewPassword: newPassword,
+		OldPassword: oldPassword,
 	}
 }
 

@@ -69,7 +69,13 @@ func (h *AccountHandler) ChangePassword(ctx *gin.Context) {
 		return
 	}
 
-	command := commands.NewChangePasswordCommand(&input)
+	userId, _ := ctx.Get("userId")
+	command := commands.NewChangePasswordCommand(
+		userId.(string),
+		input.NewPassword,
+		input.OldPassword,
+	)
+
 	result, err := h.AccountService.ChangePassword(&command)
 	if err != nil {
 		ctx.Error(err)
@@ -91,7 +97,12 @@ func (h *AccountHandler) ChangeUsername(ctx *gin.Context) {
 		return
 	}
 
-	command := commands.NewChangeUsernameCommand(&input)
+	userId, _ := ctx.Get("userId")
+	command := commands.NewChangeUsernameCommand(
+		userId.(string),
+		input.Username,
+	)
+
 	result, err := h.AccountService.ChangeUsername(&command)
 	if err != nil {
 		ctx.Error(err)
