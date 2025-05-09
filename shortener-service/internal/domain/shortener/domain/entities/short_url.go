@@ -3,7 +3,6 @@ package entities
 import (
 	"time"
 
-	domain_services "github.com/shortener-service/internal/domain/shortener/domain/services"
 	ValueObjects "github.com/shortener-service/internal/domain/shortener/domain/value-objects"
 )
 
@@ -28,7 +27,7 @@ func NewShortURL(id, userId, hash, endpoint string) (ShortURL, error) {
 		return ShortURL{}, err
 	}
 
-	Hash, err := domain_services.NewHashReservationService().Reserve(5)
+	Hash, err := ValueObjects.NewHash(hash)
 	if err != nil {
 		return ShortURL{}, err
 	}
