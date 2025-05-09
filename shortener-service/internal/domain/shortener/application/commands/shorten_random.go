@@ -1,5 +1,19 @@
 package commands
 
-type ShortenRandomCommand struct{}
+type ShortenRandomCommand struct {
+	UserID   string
+	Length   int
+	Endpoint string
+}
 
-type ShortenRandomCommandOutput struct{}
+func NewShortenRandomCommand(userId string, length int, endpoint string) *ShortenRandomCommand {
+	return &ShortenRandomCommand{
+		UserID:   userId,
+		Length:   length,
+		Endpoint: endpoint,
+	}
+}
+
+type ShortenRandomCommandOutput struct {
+	ShortenURL string
+}
