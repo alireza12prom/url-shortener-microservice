@@ -5,7 +5,7 @@ import (
 	"regexp"
 )
 
-var HashPattern = regexp.MustCompile(`^[a-zA-Z0-9]{6}$`)
+var HashPattern = regexp.MustCompile(`^[a-zA-Z0-9]*$`)
 
 type Hash struct {
 	value string
