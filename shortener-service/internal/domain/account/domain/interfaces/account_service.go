@@ -1,8 +1,8 @@
 package interfaces
 
 import (
-	"github.com/shortener-service/internal/account/application/commands"
-	"github.com/shortener-service/internal/account/application/queries"
+	"github.com/shortener-service/internal/domain/account/application/commands"
+	"github.com/shortener-service/internal/domain/account/application/queries"
 )
 
 type AccountService interface {

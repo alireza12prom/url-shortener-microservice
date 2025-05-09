@@ -4,9 +4,9 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/shortener-service/internal/account/application/services"
-	"github.com/shortener-service/internal/account/dal/repositories"
-	"github.com/shortener-service/internal/account/interfaces/http"
+	"github.com/shortener-service/internal/domain/account/application/services"
+	"github.com/shortener-service/internal/domain/account/dal/repositories"
+	"github.com/shortener-service/internal/domain/account/interfaces/http"
 	"github.com/shortener-service/internal/infrastructure/scylladb"
 )
 

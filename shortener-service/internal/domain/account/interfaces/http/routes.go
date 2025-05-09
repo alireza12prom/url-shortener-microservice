@@ -2,7 +2,7 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/shortener-service/internal/account/interfaces/http/middlewares"
+	"github.com/shortener-service/internal/domain/account/interfaces/http/middlewares"
 )
 
 func SetupAccountRoutes(engine *gin.Engine, handler *AccountHandler) {

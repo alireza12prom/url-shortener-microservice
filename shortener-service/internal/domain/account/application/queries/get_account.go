@@ -1,6 +1,6 @@
 package queries
 
-import "github.com/shortener-service/internal/account/application/dto"
+import "github.com/shortener-service/internal/domain/account/application/dto"
 
 type GetAccountQuery struct {
 	UserID string

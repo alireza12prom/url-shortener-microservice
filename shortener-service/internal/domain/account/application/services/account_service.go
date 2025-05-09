@@ -4,11 +4,11 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/shortener-service/internal/account/application/commands"
-	"github.com/shortener-service/internal/account/application/queries"
-	"github.com/shortener-service/internal/account/domain/entities"
-	"github.com/shortener-service/internal/account/domain/interfaces"
 	exceptions "github.com/shortener-service/internal/common/exceptions"
+	"github.com/shortener-service/internal/domain/account/application/commands"
+	"github.com/shortener-service/internal/domain/account/application/queries"
+	"github.com/shortener-service/internal/domain/account/domain/entities"
+	"github.com/shortener-service/internal/domain/account/domain/interfaces"
 	"github.com/shortener-service/internal/infrastructure/jwt"
 )
 

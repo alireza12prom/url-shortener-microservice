@@ -2,10 +2,10 @@ package repositories
 
 import (
 	"github.com/gocql/gocql"
-	"github.com/shortener-service/internal/account/dal/mappers"
-	"github.com/shortener-service/internal/account/dal/models"
-	"github.com/shortener-service/internal/account/domain/entities"
 	exceptions "github.com/shortener-service/internal/common/exceptions"
+	"github.com/shortener-service/internal/domain/account/dal/mappers"
+	"github.com/shortener-service/internal/domain/account/dal/models"
+	"github.com/shortener-service/internal/domain/account/domain/entities"
 	"github.com/shortener-service/internal/infrastructure/scylladb"
 )
 

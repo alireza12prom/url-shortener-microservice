@@ -2,11 +2,11 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/shortener-service/internal/account/application/commands"
-	"github.com/shortener-service/internal/account/application/dto"
-	"github.com/shortener-service/internal/account/application/queries"
-	"github.com/shortener-service/internal/account/domain/interfaces"
 	exceptions "github.com/shortener-service/internal/common/exceptions"
+	"github.com/shortener-service/internal/domain/account/application/commands"
+	"github.com/shortener-service/internal/domain/account/application/dto"
+	"github.com/shortener-service/internal/domain/account/application/queries"
+	"github.com/shortener-service/internal/domain/account/domain/interfaces"
 )
 
 type AccountHandler struct {
