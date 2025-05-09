@@ -1,10 +1,6 @@
 package domain_services
 
-import (
-	"errors"
-
-	ValueObjects "github.com/shortener-service/internal/domain/shortener/domain/value-objects"
-)
+import "math/rand"
 
 type HashReservationService struct {
 	charset string
@@ -16,21 +12,10 @@ func NewHashReservationService() *HashReservationService {
 	}
 }
 
-func (s *HashReservationService) Reserve(length int) (*ValueObjects.Hash, error) {
-	if length <= 0 {
-		return nil, errors.New("invalid hash length")
+func (s *HashReservationService) Reserve(length int) string {
+	result := make([]byte, length)
+	for i := range result {
+		result[i] = s.charset[rand.Intn(len(s.charset))]
 	}
-
-	result := ""
-	for length > 0 {
-		result = string(s.charset[length%len(s.charset)]) + result
-		length /= len(s.charset)
-	}
-
-	hash, err := ValueObjects.NewHash(result)
-	if err != nil {
-		return nil, err
-	}
-
-	return hash, nil
+	return string(result)
 }
