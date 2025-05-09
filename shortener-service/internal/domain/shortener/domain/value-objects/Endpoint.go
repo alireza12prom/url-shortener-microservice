@@ -11,7 +11,7 @@ type Endpoint struct {
 
 func NewEndpoint(value string) (*Endpoint, error) {
 	u, err := url.ParseRequestURI(value)
-	if err != nil {
+	if err != nil || u.Hostname() == "" || (u.Scheme != "https" && u.Scheme != "http") {
 		return nil, errors.New("invalid endpoint")
 	}
 
