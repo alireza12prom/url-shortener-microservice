@@ -19,7 +19,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"mew\",\n    \"username\": \"mew\",\n    \"password\": \"mew1234\"\n}",
+									"raw": "{\n    \"name\": \"alireza\",\n    \"username\": \"alirezax\",\n    \"password\": \"123456789\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -46,7 +46,9 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.collectionVariables.set(\"token\", pm.response.json().result.token)"
+											"if (pm.response.json()?.result?.token) {",
+											"  pm.collectionVariables.set(\"token\", pm.response.json().result.token)",
+											"}"
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -58,7 +60,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"username\": \"mew\",\n    \"password\": \"mew1234\"\n}",
+									"raw": "{\n    \"username\": \"alirezaz\",\n    \"password\": \"987654321\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -116,6 +118,15 @@
 							"request": {
 								"method": "POST",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"newPassword\": \"987654321\",\n    \"oldPassword\": \"123456789\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
 									"raw": "{{base_url}}/account/password.change",
 									"host": [
@@ -134,6 +145,15 @@
 							"request": {
 								"method": "POST",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"alirezaz\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
 									"raw": "{{base_url}}/account/username.change",
 									"host": [
@@ -148,10 +168,79 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Shortener",
+					"item": [
+						{
+							"name": "Shorten Custom",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"hash\": \"s1aa1\",\n    \"endpoint\": \"https://google.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/shortener/shorten.custom",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"shortener",
+										"shorten.custom"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Shorten Random",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"length\": 5,\n    \"endpoint\": \"https://google.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/shortener/shorten.random",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"shortener",
+										"shorten.random"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
 	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",
