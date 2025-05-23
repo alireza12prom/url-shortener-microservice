@@ -95,6 +95,11 @@ func (s *AccountService) LoginAccount(command *commands.LoginAccountCommand) (
 		return nil, exceptions.NewBusinessException(exceptions.LoginFailed, nil)
 	}
 
+	err = s.eventPublisher.Publish(events.NewLoginHappenedEvent(account))
+	if err != nil {
+		log.Println("Error publishing event:", err)
+	}
+
 	return &commands.LoginAccountCommandResult{
 		Token: token,
 	}, nil
