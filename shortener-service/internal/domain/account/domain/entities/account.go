@@ -41,25 +41,26 @@ func NewAccount(id, name, username, password string) (*AccountEntity, error) {
 	}, nil
 }
 
-func (u *AccountEntity) UpdateUsername(value string) error {
+func (Self *AccountEntity) UpdateUsername(value string) error {
 	username, err := ValueObjects.NewUsername(value)
 	if err != nil {
 		return err
 	}
 
-	u.Username = username
-	u.UpdatedAt = time.Now()
+	Self.Username = username
+	Self.UpdatedAt = time.Now()
 
 	return nil
 }
 
-func (u *AccountEntity) UpdatePassword(value string) error {
+func (Self *AccountEntity) UpdatePassword(value string) error {
 	password, err := ValueObjects.NewPassword(value)
 	if err != nil {
 		return err
 	}
 
-	u.Password = password
-	u.UpdatedAt = time.Now()
+	Self.Password = password
+	Self.UpdatedAt = time.Now()
+
 	return nil
 }
