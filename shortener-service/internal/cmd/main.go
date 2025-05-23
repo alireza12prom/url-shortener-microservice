@@ -2,8 +2,6 @@ package main
 
 import (
 	"log"
-	"math/rand"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	account_service "github.com/shortener-service/internal/domain/account/application/services"
@@ -12,11 +10,11 @@ import (
 	shortener_service "github.com/shortener-service/internal/domain/shortener/application/services"
 	shortener_repositories "github.com/shortener-service/internal/domain/shortener/dal/repositories"
 	shortener_http "github.com/shortener-service/internal/domain/shortener/interfaces/http"
+	"github.com/shortener-service/internal/infrastructure/kafka"
 	"github.com/shortener-service/internal/infrastructure/scylladb"
 )
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.New()
@@ -25,11 +23,21 @@ func main() {
 	// -- Initialize the database connection --
 	connection := scylladb.NewScyllaDB([]string{"127.0.0.1:9042"}, "shortener")
 
-	// -- Initialize the account handler --
+	// -- Initialize the account domain --
+	accountEventPublisher := kafka.NewKafkaPublisher(
+		&kafka.KafkaPublisherConfig{
+			Addrs: []string{"192.168.1.101:9092"},
+			Topic: kafka.Topic{
+				Name:       "shortener-service.account.events",
+				Partitions: 1,
+			},
+		},
+	)
 	accountRepository := account_repositories.NewAccountRepository(connection)
-	accountService := account_service.NewAccountService(accountRepository)
+	accountService := account_service.NewAccountService(accountRepository, accountEventPublisher)
 	account_http.SetupAccountRoutes(r, &account_http.AccountHandler{AccountService: accountService})
 
+	// -- Initialize the shortener domain --
 	shortURLRepository := shortener_repositories.NewShortURLRepository(connection)
 	shortenerService := shortener_service.NewShortenerService(shortURLRepository)
 	shortener_http.SetupShortenerRoutes(r, &shortener_http.ShortenerHandler{ShortenerService: shortenerService})

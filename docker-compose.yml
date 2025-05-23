@@ -9,8 +9,17 @@ services:
     ports:
       - "3000:3000"
     networks:
+      - db_net 
+  redirector_service:
+    depends_on:
+      - db
+    build:
+      context: ./redirector-service
+      dockerfile: ./Dockerfile
+    ports:
+      - "3001:3001"
+    networks:
       - db_net
-    
   db:
     image: scylladb/scylla
     container_name: scylladb
@@ -22,8 +31,44 @@ services:
     networks:
       - db_net
 
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      CLUSTER_ID: Mf2Ue57NzU6EX9zZJvD2Mw==
+      KAFKA_NODE_ID: 1
+      KAFKA_KRAFT_BROKER_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://127.0.0.1:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+    networks:
+      - kafka_net
+    command:
+      - sh
+      - -c
+      - |
+        echo "Starting Kafka in KRaft mode..."
+        /etc/confluent/docker/run
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - 8080:8080
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+    networks:
+      - kafka_net
+
 volumes:
   scylla_data:
 
 networks:
   db_net:
+  kafka_net:

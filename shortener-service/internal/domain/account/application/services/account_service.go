@@ -1,6 +1,7 @@
 package services
 
 import (
+	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -8,17 +9,24 @@ import (
 	"github.com/shortener-service/internal/domain/account/application/commands"
 	"github.com/shortener-service/internal/domain/account/application/queries"
 	"github.com/shortener-service/internal/domain/account/domain/entities"
+	"github.com/shortener-service/internal/domain/account/domain/events"
 	"github.com/shortener-service/internal/domain/account/domain/interfaces"
 	"github.com/shortener-service/internal/infrastructure/jwt"
+	"github.com/shortener-service/internal/lib"
 )
 
 type AccountService struct {
-	accountRepo interfaces.AccountRepository
+	accountRepo    interfaces.AccountRepository
+	eventPublisher lib.EventPublisher
 }
 
-func NewAccountService(accountRepo interfaces.AccountRepository) *AccountService {
+func NewAccountService(
+	accountRepo interfaces.AccountRepository,
+	eventPublisher lib.EventPublisher,
+) *AccountService {
 	return &AccountService{
-		accountRepo: accountRepo,
+		accountRepo:    accountRepo,
+		eventPublisher: eventPublisher,
 	}
 }
 
@@ -26,7 +34,6 @@ func (s *AccountService) RegisterAccount(command *commands.RegisterAccountComman
 	*commands.RegisterAccountCommandResult,
 	error,
 ) {
-	// check "username" is unique
 	isUsernameUnique, err := s.accountRepo.IsUsernameUnique(command.Username)
 	if err != nil {
 		return nil, err
@@ -36,7 +43,6 @@ func (s *AccountService) RegisterAccount(command *commands.RegisterAccountComman
 		return nil, exceptions.NewBusinessException(exceptions.UsernameAlreadyTaken, nil)
 	}
 
-	// create a new account
 	entity, err := entities.NewAccount(
 		uuid.New().String(),
 		command.Name,
@@ -50,6 +56,11 @@ func (s *AccountService) RegisterAccount(command *commands.RegisterAccountComman
 	err = s.accountRepo.Save(entity)
 	if err != nil {
 		return nil, err
+	}
+
+	err = s.eventPublisher.Publish(events.NewAccountCreatedEvent(entity))
+	if err != nil {
+		log.Println("Error publishing event:", err)
 	}
 
 	return &commands.RegisterAccountCommandResult{
