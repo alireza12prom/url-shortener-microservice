@@ -10,12 +10,12 @@ import (
 )
 
 type AccountRepository struct {
-	connection *scylladb.ScyllaDB
+	session *gocql.Session
 }
 
 func NewAccountRepository(connection *scylladb.ScyllaDB) *AccountRepository {
 	return &AccountRepository{
-		connection: connection,
+		session: connection.GetSession(),
 	}
 }
 
@@ -24,7 +24,7 @@ func (r *AccountRepository) Save(account *entities.AccountEntity) error {
 
 	model := mappers.MapToAccountModel(account)
 
-	err := r.connection.Session.Query(query, model.ID, model.Name, model.Username, model.Password, model.CreatedAt, model.UpdatedAt).Exec()
+	err := r.session.Query(query, model.ID, model.Name, model.Username, model.Password, model.CreatedAt, model.UpdatedAt).Exec()
 	if err != nil {
 		return exceptions.NewDatabaseException(err)
 	}
@@ -39,7 +39,7 @@ func (r *AccountRepository) GetByUserId(userId string) (
 	query := "SELECT id, name, username, password, created_at, updated_at FROM account WHERE id = ?"
 
 	var result models.AccountModel
-	err := r.connection.Session.Query(query, userId).Consistency(gocql.One).Scan(
+	err := r.session.Query(query, userId).Consistency(gocql.One).Scan(
 		&result.ID,
 		&result.Name,
 		&result.Username,
@@ -61,7 +61,7 @@ func (r *AccountRepository) GetByUsername(username string) (
 	query := "SELECT id, name, username, password, created_at, updated_at FROM account_by_username WHERE username = ?"
 
 	var result models.AccountModel
-	err := r.connection.Session.Query(query, username).Consistency(gocql.One).Scan(
+	err := r.session.Query(query, username).Consistency(gocql.One).Scan(
 		&result.ID,
 		&result.Name,
 		&result.Username,
@@ -87,7 +87,7 @@ func (r *AccountRepository) IsUsernameUnique(username string) (
 
 	var result int
 
-	err := r.connection.Session.Query(query, username).Consistency(gocql.One).Scan(&result)
+	err := r.session.Query(query, username).Consistency(gocql.One).Scan(&result)
 	if err != nil {
 		return false, exceptions.NewDatabaseException(err)
 	}

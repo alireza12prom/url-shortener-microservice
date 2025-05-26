@@ -3,8 +3,10 @@ package kafka
 import (
 	"context"
 	"encoding/json"
+	"time"
 
 	"github.com/segmentio/kafka-go"
+	"github.com/shortener-service/internal/common/logger"
 	"github.com/shortener-service/internal/lib"
 )
 
@@ -23,32 +25,19 @@ type (
 type KafkaPublisher struct {
 	writer *kafka.Writer
 	config *KafkaPublisherConfig
+	logger *logger.Logger
 }
 
 func NewKafkaPublisher(config *KafkaPublisherConfig) *KafkaPublisher {
-	conn, err := kafka.Dial("tcp", config.Addrs[0])
-	if err != nil {
-		panic(err.Error())
-	}
-	defer conn.Close()
-
-	err = conn.CreateTopics(kafka.TopicConfig{
-		Topic:             config.Topic.Name,
-		NumPartitions:     config.Topic.Partitions,
-		ReplicationFactor: 1,
-	})
-	if err != nil {
-		if err.Error() != "Topic already exists" {
-			panic(err.Error())
-		}
-	}
-
 	return &KafkaPublisher{
 		writer: &kafka.Writer{
-			Addr:     kafka.TCP(config.Addrs...),
-			Balancer: &kafka.LeastBytes{},
+			Addr:                   kafka.TCP(config.Addrs...),
+			Balancer:               &kafka.LeastBytes{},
+			AllowAutoTopicCreation: true,
+			Topic:                  config.Topic.Name,
 		},
 		config: config,
+		logger: logger.NewLogger("KafkaPublisher"),
 	}
 }
 
@@ -59,10 +48,14 @@ func (Self *KafkaPublisher) Publish(event *lib.Event) error {
 	}
 
 	msg := kafka.Message{
-		Topic: Self.config.Topic.Name,
-		Key:   []byte(event.AggregateID()),
 		Value: payload,
+		Time:  time.Now(),
 	}
+
+	Self.logger.Debug(
+		"Publish new event",
+		logger.Fields{"topic": Self.config.Topic.Name, "event": event},
+	)
 
 	return Self.writer.WriteMessages(context.Background(), msg)
 }

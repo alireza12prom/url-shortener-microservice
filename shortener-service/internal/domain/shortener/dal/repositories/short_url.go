@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"github.com/gocql/gocql"
 	"github.com/shortener-service/internal/common/exceptions"
 	"github.com/shortener-service/internal/domain/shortener/dal/mappers"
 	"github.com/shortener-service/internal/domain/shortener/domain/entities"
@@ -8,12 +9,12 @@ import (
 )
 
 type ShortURLRepository struct {
-	connection *scylladb.ScyllaDB
+	session *gocql.Session
 }
 
 func NewShortURLRepository(connection *scylladb.ScyllaDB) *ShortURLRepository {
 	return &ShortURLRepository{
-		connection: connection,
+		session: connection.GetSession(),
 	}
 }
 
@@ -22,7 +23,7 @@ func (s *ShortURLRepository) Save(entity *entities.ShortURL) error {
 
 	model := mappers.MapToShortURLModel(entity)
 
-	err := s.connection.Session.Query(
+	err := s.session.Query(
 		query,
 		model.ID,
 		model.UserID,

@@ -1,9 +1,8 @@
 package main
 
 import (
-	"log"
-
 	"github.com/gin-gonic/gin"
+	"github.com/shortener-service/internal/common/logger"
 	account_service "github.com/shortener-service/internal/domain/account/application/services"
 	account_repositories "github.com/shortener-service/internal/domain/account/dal/repositories"
 	account_http "github.com/shortener-service/internal/domain/account/interfaces/http"
@@ -15,6 +14,7 @@ import (
 )
 
 func main() {
+	logger := logger.NewLogger("shortener-service")
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.New()
@@ -26,7 +26,7 @@ func main() {
 	// -- Initialize the account domain --
 	accountEventPublisher := kafka.NewKafkaPublisher(
 		&kafka.KafkaPublisherConfig{
-			Addrs: []string{"192.168.1.101:9092"},
+			Addrs: []string{"127.0.0.1:29092"},
 			Topic: kafka.Topic{
 				Name:       "shortener-service.account.events",
 				Partitions: 1,
@@ -42,15 +42,8 @@ func main() {
 	shortenerService := shortener_service.NewShortenerService(shortURLRepository)
 	shortener_http.SetupShortenerRoutes(r, &shortener_http.ShortenerHandler{ShortenerService: shortenerService})
 
-	log.Println("🚀 Server running at http://0.0.0.0:3000")
-
-	for _, route := range r.Routes() {
-		log.Println("Registered route:", route.Method, route.Path)
-	}
-
-	err := r.Run("0.0.0.0:3000")
-	if err != nil {
-		log.Fatalf("Failed to start server: %v", err)
-		return
+	logger.Info("Server running at http://0.0.0.0:3000")
+	if err := r.Run("0.0.0.0:3000"); err != nil {
+		logger.Error(err.Error())
 	}
 }

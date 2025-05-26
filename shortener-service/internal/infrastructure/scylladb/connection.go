@@ -1,39 +1,41 @@
 package scylladb
 
 import (
-	"log"
 	"time"
 
 	"github.com/gocql/gocql"
+	"github.com/shortener-service/internal/common/logger"
 )
 
 type ScyllaDB struct {
-	Session *gocql.Session
+	session *gocql.Session
+	logger  *logger.Logger
 }
 
 func NewScyllaDB(hosts []string, keyspace string) *ScyllaDB {
 	cluster := gocql.NewCluster(hosts...)
+	logger := logger.NewLogger("ScyllaDB")
+
 	cluster.Keyspace = keyspace
 	cluster.Consistency = gocql.Quorum
 	cluster.Timeout = 5 * time.Second
 	cluster.ConnectTimeout = 5 * time.Second
 
-	// Optional: auth
-	// cluster.Authenticator = gocql.PasswordAuthenticator{
-	// 	Username: "scylla",
-	// 	Password: "secret",
-	// }
-
 	session, err := cluster.CreateSession()
 	if err != nil {
-		log.Fatalf("Failed to connect to ScyllaDB: %v", err)
+		logger.Error(err.Error())
 	}
 
-	log.Println("Connected to ScyllaDB")
+	logger.Info("Connected")
 
-	return &ScyllaDB{Session: session}
+	return &ScyllaDB{session: session, logger: logger}
 }
 
-func (s *ScyllaDB) Close() {
-	s.Session.Close()
+func (Self *ScyllaDB) GetSession() *gocql.Session {
+	return Self.session
+}
+
+func (Self *ScyllaDB) Close() {
+	Self.session.Close()
+	Self.logger.Info("Closed")
 }
