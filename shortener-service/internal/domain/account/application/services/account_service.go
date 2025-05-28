@@ -126,6 +126,11 @@ func (s *AccountService) ChangePassword(command *commands.ChangePasswordCommand)
 		return nil, err
 	}
 
+	err = s.eventPublisher.Publish(events.NewPasswordChangedEvent(account))
+	if err != nil {
+		log.Println("Error publishing event:", err)
+	}
+
 	return &commands.ChangePasswordCommandOutput{}, nil
 }
 
