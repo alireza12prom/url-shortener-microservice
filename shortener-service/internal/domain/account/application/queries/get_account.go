@@ -13,8 +13,8 @@ func NewGetAccountQuery(input *dto.GetAccountInput) GetAccountQuery {
 }
 
 type GetAccountQueryResult struct {
-	ID        string
-	Username  string
-	CreatedAt string
-	UpdatedAt string
+	ID        string `json:"id"`
+	Username  string `json:"username"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }
