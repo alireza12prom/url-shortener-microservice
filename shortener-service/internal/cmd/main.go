@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	configs "github.com/shortener-service/internal/common/configs"
 	"github.com/shortener-service/internal/common/logger"
 	account_service "github.com/shortener-service/internal/domain/account/application/services"
 	account_repositories "github.com/shortener-service/internal/domain/account/dal/repositories"
@@ -14,21 +15,23 @@ import (
 )
 
 func main() {
+	configs.Load()
 	logger := logger.NewLogger("shortener-service")
+
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.New()
 	r.Use(gin.Logger())
 
 	// -- Initialize the database connection --
-	connection := scylladb.NewScyllaDB([]string{"127.0.0.1:9042"}, "shortener")
+	connection := scylladb.NewScyllaDB(configs.SCYLLADB_HOSTS, configs.SCYLLADB_DATABASE)
 
 	// -- Initialize the account domain --
 	accountEventPublisher := kafka.NewKafkaPublisher(
 		&kafka.KafkaPublisherConfig{
-			Addrs: []string{"127.0.0.1:29092"},
+			Addrs: configs.KAFKA_BROKERS,
 			Topic: kafka.Topic{
-				Name:       "shortener-service.account.events",
+				Name:       configs.KAFKA_TOPIC_ACCOUNT,
 				Partitions: 1,
 			},
 		},
@@ -42,8 +45,8 @@ func main() {
 	shortenerService := shortener_service.NewShortenerService(shortURLRepository)
 	shortener_http.SetupShortenerRoutes(r, &shortener_http.ShortenerHandler{ShortenerService: shortenerService})
 
-	logger.Info("Server running at http://0.0.0.0:3000")
-	if err := r.Run("0.0.0.0:3000"); err != nil {
+	logger.Info("Server running at http://0.0.0.0:" + configs.SERVER_PORT)
+	if err := r.Run("0.0.0.0:" + configs.SERVER_PORT); err != nil {
 		logger.Error(err.Error())
 	}
 }
