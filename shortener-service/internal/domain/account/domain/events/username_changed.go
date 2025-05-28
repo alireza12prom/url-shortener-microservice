@@ -1,0 +1,26 @@
+package events
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/shortener-service/internal/domain/account/domain/entities"
+	"github.com/shortener-service/internal/lib"
+)
+
+type UsernameChangedPayload struct {
+	AccountId string `json:"shortener_id"`
+}
+
+func NewUsernameChangedEvent(entity *entities.AccountEntity) *lib.Event {
+	return &lib.Event{
+		ID:      entity.ID.GetValue(),
+		Name:    "username_changed",
+		Context: "account",
+		Payload: PasswordChangedPayload{
+			AccountId: entity.ID.GetValue(),
+		},
+		DateTime:      time.Now().Format(time.RFC3339),
+		CorrelationID: uuid.New().String(),
+	}
+}

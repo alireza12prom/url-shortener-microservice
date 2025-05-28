@@ -159,6 +159,11 @@ func (s *AccountService) ChangeUsername(command *commands.ChangeUsernameCommand)
 		return nil, err
 	}
 
+	err = s.eventPublisher.Publish(events.NewUsernameChangedEvent(account))
+	if err != nil {
+		log.Println("Error publishing event:", err)
+	}
+
 	return &commands.ChangeUsernameCommandOutput{}, nil
 }
 
