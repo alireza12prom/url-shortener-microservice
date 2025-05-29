@@ -41,8 +41,17 @@ func main() {
 	account_http.SetupAccountRoutes(r, &account_http.AccountHandler{AccountService: accountService})
 
 	// -- Initialize the shortener domain --
+	shortenerEventPublisher := kafka.NewKafkaPublisher(
+		&kafka.KafkaPublisherConfig{
+			Addrs: configs.KAFKA_BROKERS,
+			Topic: kafka.Topic{
+				Name:       configs.KAFKA_TOPIC_SHORTENER,
+				Partitions: 1,
+			},
+		},
+	)
 	shortURLRepository := shortener_repositories.NewShortURLRepository(connection)
-	shortenerService := shortener_service.NewShortenerService(shortURLRepository)
+	shortenerService := shortener_service.NewShortenerService(shortURLRepository, shortenerEventPublisher)
 	shortener_http.SetupShortenerRoutes(r, &shortener_http.ShortenerHandler{ShortenerService: shortenerService})
 
 	logger.Info("Server running at http://0.0.0.0:" + configs.SERVER_PORT)

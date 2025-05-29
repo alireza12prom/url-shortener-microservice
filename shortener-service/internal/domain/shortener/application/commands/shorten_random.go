@@ -15,5 +15,5 @@ func NewShortenRandomCommand(userId string, length int, endpoint string) *Shorte
 }
 
 type ShortenRandomCommandOutput struct {
-	ShortenURL string
+	ShortenURL string `json:"shorten_url"`
 }

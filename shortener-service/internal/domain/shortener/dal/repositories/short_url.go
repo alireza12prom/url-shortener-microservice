@@ -19,7 +19,7 @@ func NewShortURLRepository(connection *scylladb.ScyllaDB) *ShortURLRepository {
 }
 
 func (s *ShortURLRepository) Save(entity *entities.ShortURL) error {
-	query := "INSERT INTO account (id, user_id, hash, endpoint, is_active, created_at, last_accessed_at) VALUES (?, ?, ?, ?, ?, ?, ?)"
+	query := "INSERT INTO short_url (id, user_id, hash, endpoint, is_active, created_at, last_accessed_at) VALUES (?, ?, ?, ?, ?, ?, ?)"
 
 	model := mappers.MapToShortURLModel(entity)
 

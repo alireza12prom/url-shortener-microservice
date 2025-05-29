@@ -1,22 +1,31 @@
 package services
 
 import (
+	"log"
+
 	"github.com/google/uuid"
 	"github.com/shortener-service/internal/domain/shortener/application/commands"
 	"github.com/shortener-service/internal/domain/shortener/domain/entities"
+	"github.com/shortener-service/internal/domain/shortener/domain/events"
 	"github.com/shortener-service/internal/domain/shortener/domain/interfaces"
 	domain_services "github.com/shortener-service/internal/domain/shortener/domain/services"
+	"github.com/shortener-service/internal/lib"
 )
 
 type ShortenerService struct {
 	shortURLRepo           interfaces.ShortURLRepository
 	hashReservationService interfaces.HashReservationService
+	eventPublisher         lib.EventPublisher
 }
 
-func NewShortenerService(shortURLRepo interfaces.ShortURLRepository) *ShortenerService {
+func NewShortenerService(
+	shortURLRepo interfaces.ShortURLRepository,
+	eventPublisher lib.EventPublisher,
+) *ShortenerService {
 	return &ShortenerService{
 		shortURLRepo:           shortURLRepo,
 		hashReservationService: domain_services.NewHashReservationService(),
+		eventPublisher:         eventPublisher,
 	}
 }
 
@@ -41,7 +50,14 @@ func (s *ShortenerService) ShortenCustom(command *commands.ShortenCustomCommand)
 		return nil, err
 	}
 
-	return &commands.ShortenCustomCommandOutput{}, nil
+	err = s.eventPublisher.Publish(events.NewShortURLCreatedEvent(&entity))
+	if err != nil {
+		log.Println("Error publishing event:", err)
+	}
+
+	return &commands.ShortenCustomCommandOutput{
+		ShortenURL: entity.Hash.GetValue(),
+	}, nil
 }
 
 func (s *ShortenerService) ShortenRandom(command *commands.ShortenRandomCommand) (
@@ -65,5 +81,12 @@ func (s *ShortenerService) ShortenRandom(command *commands.ShortenRandomCommand)
 		return nil, err
 	}
 
-	return &commands.ShortenRandomCommandOutput{}, nil
+	err = s.eventPublisher.Publish(events.NewShortURLCreatedEvent(&entity))
+	if err != nil {
+		log.Println("Error publishing event:", err)
+	}
+
+	return &commands.ShortenRandomCommandOutput{
+		ShortenURL: entity.Hash.GetValue(),
+	}, nil
 }

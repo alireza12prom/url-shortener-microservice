@@ -16,7 +16,8 @@ var (
 )
 
 const (
-	KAFKA_TOPIC_ACCOUNT = "shortener-service.account.events"
+	KAFKA_TOPIC_ACCOUNT   = "shortener-service.account.events"
+	KAFKA_TOPIC_SHORTENER = "shortener-service.shortener.events"
 )
 
 func Load() {

@@ -15,5 +15,5 @@ func NewShortenCustomCommand(userId, hash, endpoint string) *ShortenCustomComman
 }
 
 type ShortenCustomCommandOutput struct {
-	ShortenURL string
+	ShortenURL string `json:"shorten_url"`
 }
