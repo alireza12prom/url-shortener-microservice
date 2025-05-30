@@ -10,7 +10,13 @@ type RedirectorService struct {
 	shortURLRepo interfaces.ShortURLRepository
 }
 
-func (Self *RedirectorService) Redirect(command commands.RedirectCommand) (
+func NewRedirectorService(shortURLRepo interfaces.ShortURLRepository) *RedirectorService {
+	return &RedirectorService{
+		shortURLRepo: shortURLRepo,
+	}
+}
+
+func (Self *RedirectorService) Redirect(command *commands.RedirectCommand) (
 	*commands.RedirectCommandOutput,
 	error,
 ) {
