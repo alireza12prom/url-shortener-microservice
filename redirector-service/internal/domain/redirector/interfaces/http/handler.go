@@ -28,7 +28,7 @@ func (Self *RedirectorHandler) Redirect(ctx *gin.Context) {
 
 	result, err := Self.RedirectorService.Redirect(command)
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": err.Error()})
+		ctx.Error(err)
 		return
 	}
 
