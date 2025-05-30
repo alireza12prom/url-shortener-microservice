@@ -1,3 +1,5 @@
-module github.com/alireza12prom/url-shortener-microservice/redirector-service
+module github.com/shortener-service
 
 go 1.23.5
+
+require github.com/google/uuid v1.6.0 // indirect
