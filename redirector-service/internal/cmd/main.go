@@ -7,6 +7,7 @@ import (
 	"github.com/shortener-service/internal/domain/redirector/application/services"
 	"github.com/shortener-service/internal/domain/redirector/dal/repositories"
 	redirector_http "github.com/shortener-service/internal/domain/redirector/interfaces/http"
+	"github.com/shortener-service/internal/infrastructure/kafka"
 	"github.com/shortener-service/internal/infrastructure/scylladb"
 )
 
@@ -23,8 +24,17 @@ func main() {
 	connection := scylladb.NewScyllaDB(configs.SCYLLADB_HOSTS, configs.SCYLLADB_DATABASE)
 
 	// -- Initialize the redirector domain --
+	redirectorEventPublisher := kafka.NewKafkaPublisher(
+		&kafka.KafkaPublisherConfig{
+			Addrs: configs.KAFKA_BROKERS,
+			Topic: kafka.Topic{
+				Name:       configs.KAFKA_TOPIC_REDIRECTOR,
+				Partitions: 1,
+			},
+		},
+	)
 	shortURLRepository := repositories.NewShortURLRepository(connection)
-	redirectorService := services.NewRedirectorService(shortURLRepository)
+	redirectorService := services.NewRedirectorService(shortURLRepository, redirectorEventPublisher)
 	redirector_http.SetupRedirectorRoutes(r, &redirector_http.RedirectorHandler{RedirectorService: redirectorService})
 
 	logger.Info("Server running at http://0.0.0.0:" + configs.SERVER_PORT)
