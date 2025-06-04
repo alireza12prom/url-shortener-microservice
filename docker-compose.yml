@@ -30,7 +30,22 @@ services:
       - ./shortener-service/internal/infrastructure/scylladb/init.cql:/init.cql
     networks:
       - db_net
-
+  click-house:
+    image: clickhouse/clickhouse-server
+    container_name: click-house
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 18123:8123
+      - 19000:9000
+    environment:
+      - CLICKHOUSE_PASSWORD=1234567
+    volumes:
+      - click-house_data:/var/lib/clickhouse/
+    networks:
+      - db_net
   kafka:
     image: confluentinc/cp-kafka:7.4.0
     container_name: kafka
@@ -77,6 +92,7 @@ services:
 
 volumes:
   scylla_data:
+  click-house_data:
 
 networks:
   db_net:
