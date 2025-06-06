@@ -12,9 +12,13 @@ This project is built with a focus on clean architecture principles:
 
 
 ## 👁️‍🗨️ Services Overview
+
+<p align="center">
+  <img src="./assets/Screenshot%20from%202025-05-30%2016-56-36.png" width="800">
+</p>
+
 This system is composed of three main microservices:
 
 - **URL Shortener Service** — Responsible for generating and storing shortened URLs. It handles command-side operations (writes).
-
 - **Redirector Service** — Resolves shortened URLs and redirects users to the original URL. It handles query-side operations (reads).
-- **Statistics Service** — Collects usage data (e.g. redirects, user agents, geo info) and pushes it to a data warehouse for analytics.
+- **Warehouse Service** — Collects usage data (e.g. redirects, user agents, geo info) and pushes it to a data warehouse for analytics.
