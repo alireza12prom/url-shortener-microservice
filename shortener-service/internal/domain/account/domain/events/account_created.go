@@ -9,8 +9,8 @@ import (
 )
 
 type AccountCreatedPayload struct {
-	AccountId string `json:"shortener_id"`
-	Username  string `json:"username"`
+	ID       string `json:"id"`
+	Username string `json:"username"`
 }
 
 func NewAccountCreatedEvent(entity *entities.AccountEntity) *lib.Event {
@@ -19,8 +19,8 @@ func NewAccountCreatedEvent(entity *entities.AccountEntity) *lib.Event {
 		Name:    "account_created",
 		Context: "account",
 		Payload: AccountCreatedPayload{
-			AccountId: entity.ID.GetValue(),
-			Username:  entity.Username.GetValue(),
+			ID:       entity.ID.GetValue(),
+			Username: entity.Username.GetValue(),
 		},
 		DateTime:      time.Now().Format(time.RFC3339),
 		CorrelationID: uuid.New().String(),

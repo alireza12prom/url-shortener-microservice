@@ -9,7 +9,8 @@ import (
 )
 
 type LoginHappenedPayload struct {
-	AccountId string `json:"shortener_id"`
+	ID       string `json:"id"`
+	Username string `json:"username"`
 }
 
 func NewLoginHappenedEvent(entity *entities.AccountEntity) *lib.Event {
@@ -18,7 +19,8 @@ func NewLoginHappenedEvent(entity *entities.AccountEntity) *lib.Event {
 		Name:    "login_happened",
 		Context: "account",
 		Payload: LoginHappenedPayload{
-			AccountId: entity.ID.GetValue(),
+			ID:       entity.ID.GetValue(),
+			Username: entity.Username.GetValue(),
 		},
 		DateTime:      time.Now().Format(time.RFC3339),
 		CorrelationID: uuid.New().String(),

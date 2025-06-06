@@ -9,7 +9,8 @@ import (
 )
 
 type PasswordChangedPayload struct {
-	AccountId string `json:"shortener_id"`
+	ID       string `json:"id"`
+	Username string `json:"username"`
 }
 
 func NewPasswordChangedEvent(entity *entities.AccountEntity) *lib.Event {
@@ -18,7 +19,8 @@ func NewPasswordChangedEvent(entity *entities.AccountEntity) *lib.Event {
 		Name:    "password_changed",
 		Context: "account",
 		Payload: PasswordChangedPayload{
-			AccountId: entity.ID.GetValue(),
+			ID:       entity.ID.GetValue(),
+			Username: entity.ID.GetValue(),
 		},
 		DateTime:      time.Now().Format(time.RFC3339),
 		CorrelationID: uuid.New().String(),
