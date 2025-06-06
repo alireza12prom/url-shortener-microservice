@@ -17,9 +17,9 @@ func NewRegisterAccountCommand(input *dto.RegisterAccountInput) RegisterAccountC
 }
 
 type RegisterAccountCommandResult struct {
-	ID        string
-	Name      string
-	Username  string
-	CreatedAt string
-	UpdatedAt string
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	Username  string `json:"username"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }
