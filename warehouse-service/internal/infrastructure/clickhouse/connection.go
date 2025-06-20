@@ -1,4 +1,4 @@
-package scylladb
+package clickhouse
 
 import (
 	"github.com/ClickHouse/clickhouse-go/v2"
@@ -6,7 +6,7 @@ import (
 )
 
 type ClickHouseDB struct {
-	session *clickhouse.Conn
+	session clickhouse.Conn
 	logger  *logger.Logger
 }
 
@@ -27,5 +27,9 @@ func NewClickHouseDB() *ClickHouseDB {
 
 	logger.Info("Connected")
 
-	return &ClickHouseDB{session: &conn, logger: logger}
+	return &ClickHouseDB{session: conn, logger: logger}
+}
+
+func (Self *ClickHouseDB) GetSession() clickhouse.Conn {
+	return Self.session
 }
