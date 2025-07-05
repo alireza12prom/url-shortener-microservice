@@ -1,13 +1,17 @@
 package entities
 
-import ValueObjects "github.com/warehouse-service/internal/domain/domain-events/domain/value-objects"
+import (
+	"time"
+
+	ValueObjects "github.com/warehouse-service/internal/domain/domain-events/domain/value-objects"
+)
 
 type DomainEventEntity struct {
 	ID            *ValueObjects.ID
 	Name          string
 	Context       string
 	Payload       any
-	DateTime      string
+	DateTime      *time.Time
 	CorrelationID *ValueObjects.ID
 }
 
@@ -29,12 +33,17 @@ func NewDomainEventEntity(
 		return nil, err
 	}
 
+	DateTime, error := time.Parse(time.RFC3339, datetime)
+	if error != nil {
+		return nil, error
+	}
+
 	return &DomainEventEntity{
 		ID:            ID,
 		Name:          name,
 		Context:       context,
 		Payload:       payload,
-		DateTime:      datetime,
+		DateTime:      &DateTime,
 		CorrelationID: CorrelationID,
 	}, nil
 }
