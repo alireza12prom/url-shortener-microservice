@@ -4,26 +4,25 @@ import (
 	"context"
 
 	"github.com/segmentio/kafka-go"
+	"github.com/warehouse-service/internal/common/configs"
 )
 
 type (
-	KafkaListenerConfig struct {
-		Addrs []string
+	KafkaConsumerConfig struct {
 		Group string
 		Topic string
 	}
+	KafkaListener struct {
+		reader *kafka.Reader
+		config *KafkaConsumerConfig
+	}
 )
 
-type KafkaListener struct {
-	reader *kafka.Reader
-	config *KafkaListenerConfig
-}
-
-func NewKafkaListener(config *KafkaListenerConfig) *KafkaListener {
+func NewKafkaConsumer(config *KafkaConsumerConfig) *KafkaListener {
 	return &KafkaListener{
 		reader: kafka.NewReader(
 			kafka.ReaderConfig{
-				Brokers:        config.Addrs,
+				Brokers:        configs.KAFKA_BROKERS,
 				GroupID:        config.Group,
 				Topic:          config.Topic,
 				IsolationLevel: kafka.ReadCommitted,
@@ -33,12 +32,12 @@ func NewKafkaListener(config *KafkaListenerConfig) *KafkaListener {
 	}
 }
 
-func (Self *KafkaListener) Listen(handler func([]byte) error) error {
+func (Self *KafkaListener) Consume(handler func([]byte) error) error {
 	println("Starting Kafka listener on topic:", Self.config.Topic)
 	ctx := context.Background()
 
 	for {
-		m, err := Self.reader.FetchMessage(ctx)
+		m, err := Self.reader.ReadMessage(ctx)
 		if err != nil {
 			println("Error fetching message:", err.Error())
 			return err
