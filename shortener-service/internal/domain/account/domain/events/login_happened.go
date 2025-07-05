@@ -23,6 +23,6 @@ func NewLoginHappenedEvent(entity *entities.AccountEntity) *lib.Event {
 			Username: entity.Username.GetValue(),
 		},
 		DateTime:      time.Now().Format(time.RFC3339),
-		CorrelationID: uuid.New().String(),
+		CorrelationID: uuid.New().String(), // FIXME: use request-id
 	}
 }
