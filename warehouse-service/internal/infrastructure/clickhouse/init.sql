@@ -1,4 +1,6 @@
-CREATE TABLE domain_events (
+CREATE DATABASE IF NOT EXISTS warehouse;
+
+CREATE TABLE IF NOT EXISTS warehouse.domain_events (
     id UUID,
     name String,
     context String,
