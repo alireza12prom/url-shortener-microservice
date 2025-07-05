@@ -44,6 +44,7 @@ services:
       - CLICKHOUSE_PASSWORD=1234567
     volumes:
       - click-house_data:/var/lib/clickhouse/
+      - ./warehouse-service/internal/infrastructure/clickhouse/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     networks:
       - db_net
   kafka:
