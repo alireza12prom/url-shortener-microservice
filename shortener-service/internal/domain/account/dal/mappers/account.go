@@ -3,7 +3,7 @@ package mappers
 import (
 	"github.com/shortener-service/internal/domain/account/dal/models"
 	"github.com/shortener-service/internal/domain/account/entities"
-	ValueObjects "github.com/shortener-service/internal/domain/account/value-objects"
+	"github.com/shortener-service/internal/domain/account/value-objects"
 )
 
 func MapToAccountModel(e *entities.AccountEntity) *models.AccountModel {
@@ -18,9 +18,9 @@ func MapToAccountModel(e *entities.AccountEntity) *models.AccountModel {
 }
 
 func MapToAccountDomain(m *models.AccountModel) *entities.AccountEntity {
-	ID, _ := ValueObjects.NewID(m.ID)
-	Username, _ := ValueObjects.NewUsername(m.Username)
-	Password := ValueObjects.NewHashedPassword(m.Password)
+	ID, _ := valueobjects.NewID(m.ID)
+	Username, _ := valueobjects.NewUsername(m.Username)
+	Password := valueobjects.NewHashedPassword(m.Password)
 
 	return &entities.AccountEntity{
 		ID:        ID,

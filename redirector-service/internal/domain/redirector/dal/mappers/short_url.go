@@ -3,7 +3,7 @@ package mappers
 import (
 	"github.com/shortener-service/internal/domain/redirector/dal/models"
 	"github.com/shortener-service/internal/domain/redirector/entities"
-	ValueObjects "github.com/shortener-service/internal/domain/redirector/value-objects"
+	valueobjects "github.com/shortener-service/internal/domain/redirector/value-objects"
 )
 
 func MapToShortURLModel(e *entities.ShortURL) *models.ShortURLModel {
@@ -19,10 +19,10 @@ func MapToShortURLModel(e *entities.ShortURL) *models.ShortURLModel {
 }
 
 func MapToShortURLDomain(m *models.ShortURLModel) *entities.ShortURL {
-	ID, _ := ValueObjects.NewID(m.ID)
-	UserID, _ := ValueObjects.NewID(m.UserID)
-	Hash, _ := ValueObjects.NewHash(m.Hash)
-	Endpoint, _ := ValueObjects.NewEndpoint(m.Endpoint)
+	ID, _ := valueobjects.NewID(m.ID)
+	UserID, _ := valueobjects.NewID(m.UserID)
+	Hash, _ := valueobjects.NewHash(m.Hash)
+	Endpoint, _ := valueobjects.NewEndpoint(m.Endpoint)
 
 	return &entities.ShortURL{
 		ID:             ID,

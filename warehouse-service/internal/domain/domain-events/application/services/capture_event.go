@@ -11,7 +11,7 @@ type CaptureEventService struct {
 	EventRepo interfaces.DomainEventRepository
 }
 
-func (Self *CaptureEventService) Exec(command interface{}) error {
+func (s *CaptureEventService) Exec(command interface{}) error {
 	cmd, ok := command.(*commands.CaptureEventCommand)
 	if !ok {
 		return exceptions.NewBusinessException(exceptions.InvalidCommandType, nil)
@@ -29,7 +29,7 @@ func (Self *CaptureEventService) Exec(command interface{}) error {
 		return err
 	}
 
-	err = Self.EventRepo.Save(entity)
+	err = s.EventRepo.Save(entity)
 	if err != nil {
 		return err
 	}

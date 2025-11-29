@@ -9,6 +9,6 @@ type Event struct {
 	CorrelationID string `json:"correlation_id"`
 }
 
-func (Self *Event) AggregateID() string {
-	return Self.ID
+func (e *Event) AggregateID() string {
+	return e.ID
 }

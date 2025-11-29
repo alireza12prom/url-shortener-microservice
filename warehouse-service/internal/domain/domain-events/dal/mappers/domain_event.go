@@ -6,7 +6,7 @@ import (
 
 	"github.com/warehouse-service/internal/domain/domain-events/dal/models"
 	"github.com/warehouse-service/internal/domain/domain-events/entities"
-	ValueObjects "github.com/warehouse-service/internal/domain/domain-events/value-objects"
+	"github.com/warehouse-service/internal/domain/domain-events/value-objects"
 )
 
 func MapToAccountModel(e *entities.DomainEventEntity) *models.DomainEventModel {
@@ -23,8 +23,8 @@ func MapToAccountModel(e *entities.DomainEventEntity) *models.DomainEventModel {
 }
 
 func MapToAccountDomain(m *models.DomainEventModel) *entities.DomainEventEntity {
-	ID, _ := ValueObjects.NewID(m.ID)
-	CorrelationID, _ := ValueObjects.NewID(m.CorrelationID)
+	ID, _ := valueobjects.NewID(m.ID)
+	CorrelationID, _ := valueobjects.NewID(m.CorrelationID)
 	DateTime, _ := time.Parse("2006-01-02 15:04:05", m.DateTime)
 
 	return &entities.DomainEventEntity{

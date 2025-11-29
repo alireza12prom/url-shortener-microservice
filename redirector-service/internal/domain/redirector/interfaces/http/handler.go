@@ -12,7 +12,7 @@ type RedirectorHandler struct {
 	RedirectorService interfaces.RedirectorService
 }
 
-func (Self *RedirectorHandler) Redirect(ctx *gin.Context) {
+func (h *RedirectorHandler) Redirect(ctx *gin.Context) {
 	var input dto.RedirectInput
 
 	if err := ctx.ShouldBindUri(&input); err != nil {
@@ -26,7 +26,7 @@ func (Self *RedirectorHandler) Redirect(ctx *gin.Context) {
 
 	command := commands.NewRedirectCommand(input.Hash)
 
-	result, err := Self.RedirectorService.Redirect(command)
+	result, err := h.RedirectorService.Redirect(command)
 	if err != nil {
 		ctx.Error(err)
 		return

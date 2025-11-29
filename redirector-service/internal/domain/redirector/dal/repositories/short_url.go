@@ -19,7 +19,7 @@ func NewShortURLRepository(connection *scylladb.ScyllaDB) *ShortURLRepository {
 	}
 }
 
-func (Self *ShortURLRepository) GetByHash(hash string) (
+func (r *ShortURLRepository) GetByHash(hash string) (
 	*entities.ShortURL,
 	error,
 ) {
@@ -37,7 +37,7 @@ func (Self *ShortURLRepository) GetByHash(hash string) (
 		WHERE hash = ?`
 
 	var result models.ShortURLModel
-	err := Self.session.Query(query, hash).Consistency(gocql.One).Scan(
+	err := r.session.Query(query, hash).Consistency(gocql.One).Scan(
 		&result.ID,
 		&result.UserID,
 		&result.Endpoint,

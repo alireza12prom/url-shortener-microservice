@@ -31,11 +31,11 @@ func NewScyllaDB(hosts []string, keyspace string) *ScyllaDB {
 	return &ScyllaDB{session: session, logger: logger}
 }
 
-func (Self *ScyllaDB) GetSession() *gocql.Session {
-	return Self.session
+func (db *ScyllaDB) GetSession() *gocql.Session {
+	return db.session
 }
 
-func (Self *ScyllaDB) Close() {
-	Self.session.Close()
-	Self.logger.Info("Closed")
+func (db *ScyllaDB) Close() {
+	db.session.Close()
+	db.logger.Info("Closed")
 }

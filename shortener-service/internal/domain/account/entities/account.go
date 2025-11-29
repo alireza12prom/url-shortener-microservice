@@ -3,30 +3,30 @@ package entities
 import (
 	"time"
 
-	ValueObjects "github.com/shortener-service/internal/domain/account/value-objects"
+	"github.com/shortener-service/internal/domain/account/value-objects"
 )
 
 type AccountEntity struct {
-	ID        *ValueObjects.ID
+	ID        *valueobjects.ID
 	Name      string
-	Username  *ValueObjects.Username
-	Password  *ValueObjects.Password
+	Username  *valueobjects.Username
+	Password  *valueobjects.Password
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
 func NewAccount(id, name, username, password string) (*AccountEntity, error) {
-	ID, err := ValueObjects.NewID(id)
+	ID, err := valueobjects.NewID(id)
 	if err != nil {
 		return nil, err
 	}
 
-	Username, err := ValueObjects.NewUsername(username)
+	Username, err := valueobjects.NewUsername(username)
 	if err != nil {
 		return nil, err
 	}
 
-	Password, err := ValueObjects.NewPassword(password)
+	Password, err := valueobjects.NewPassword(password)
 	if err != nil {
 		return nil, err
 	}
@@ -41,26 +41,26 @@ func NewAccount(id, name, username, password string) (*AccountEntity, error) {
 	}, nil
 }
 
-func (Self *AccountEntity) UpdateUsername(value string) error {
-	username, err := ValueObjects.NewUsername(value)
+func (a *AccountEntity) UpdateUsername(value string) error {
+	username, err := valueobjects.NewUsername(value)
 	if err != nil {
 		return err
 	}
 
-	Self.Username = username
-	Self.UpdatedAt = time.Now()
+	a.Username = username
+	a.UpdatedAt = time.Now()
 
 	return nil
 }
 
-func (Self *AccountEntity) UpdatePassword(value string) error {
-	password, err := ValueObjects.NewPassword(value)
+func (a *AccountEntity) UpdatePassword(value string) error {
+	password, err := valueobjects.NewPassword(value)
 	if err != nil {
 		return err
 	}
 
-	Self.Password = password
-	Self.UpdatedAt = time.Now()
+	a.Password = password
+	a.UpdatedAt = time.Now()
 
 	return nil
 }

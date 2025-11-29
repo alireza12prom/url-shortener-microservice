@@ -26,11 +26,11 @@ func NewRedirectorService(
 	}
 }
 
-func (Self *RedirectorService) Redirect(command *commands.RedirectCommand) (
+func (s *RedirectorService) Redirect(command *commands.RedirectCommand) (
 	*commands.RedirectCommandOutput,
 	error,
 ) {
-	shortURL, err := Self.shortURLRepo.GetByHash(command.Hash)
+	shortURL, err := s.shortURLRepo.GetByHash(command.Hash)
 	if err != nil {
 		return nil, err
 	}
@@ -39,9 +39,9 @@ func (Self *RedirectorService) Redirect(command *commands.RedirectCommand) (
 		return nil, exceptions.NewBusinessException(exceptions.ShortURLNotFound, nil)
 	}
 
-	err = Self.eventPublisher.Publish(events.NewRedirectHappenedEvent(shortURL))
+	err = s.eventPublisher.Publish(events.NewRedirectHappenedEvent(shortURL))
 	if err != nil {
-		Self.logger.Error("Failed to publish domain event", logger.Fields{"Exception": err.Error()})
+		s.logger.Error("Failed to publish domain event", logger.Fields{"Exception": err.Error()})
 	}
 
 	return &commands.RedirectCommandOutput{

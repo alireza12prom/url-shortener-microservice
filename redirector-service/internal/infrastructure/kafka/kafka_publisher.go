@@ -41,7 +41,7 @@ func NewKafkaPublisher(config *KafkaPublisherConfig) *KafkaPublisher {
 	}
 }
 
-func (Self *KafkaPublisher) Publish(event *lib.Event) error {
+func (p *KafkaPublisher) Publish(event *lib.Event) error {
 	payload, err := json.Marshal(event)
 	if err != nil {
 		return err
@@ -52,10 +52,10 @@ func (Self *KafkaPublisher) Publish(event *lib.Event) error {
 		Time:  time.Now(),
 	}
 
-	Self.logger.Debug(
+	p.logger.Debug(
 		"Publish new event",
-		logger.Fields{"topic": Self.config.Topic.Name, "event": event},
+		logger.Fields{"topic": p.config.Topic.Name, "event": event},
 	)
 
-	return Self.writer.WriteMessages(context.Background(), msg)
+	return p.writer.WriteMessages(context.Background(), msg)
 }

@@ -1,4 +1,4 @@
-package ValueObjects
+package valueobjects
 
 type Username struct {
 	value string
@@ -11,6 +11,6 @@ func NewUsername(value string) (*Username, error) {
 	}, nil
 }
 
-func (id *Username) GetValue() string {
-	return id.value
+func (u *Username) GetValue() string {
+	return u.value
 }

@@ -1,4 +1,4 @@
-package ValueObjects
+package valueobjects
 
 import "github.com/google/uuid"
 
@@ -12,11 +12,9 @@ func NewID(value string) (*ID, error) {
 		return nil, err
 	}
 
-	return &ID{
-		value: id,
-	}, nil
+	return &ID{value: id}, nil
 }
 
-func (id *ID) GetValue() string {
-	return id.value.String()
+func (s *ID) GetValue() string {
+	return s.value.String()
 }

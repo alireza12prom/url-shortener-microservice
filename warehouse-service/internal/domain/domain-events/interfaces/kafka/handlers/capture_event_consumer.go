@@ -20,17 +20,17 @@ func NewCaptureEventConsumer(service lib.ApplicationService) *CaptureEventConsum
 	}
 }
 
-func (Self *CaptureEventConsumer) Handle(input []byte) error {
+func (h *CaptureEventConsumer) Handle(input []byte) error {
 	var command commands.CaptureEventCommand
 	if err := json.Unmarshal(input, &command); err != nil {
 		return err
 	}
 
-	Self.Logger.Debug("Command", logger.Fields{
+	h.Logger.Debug("Command", logger.Fields{
 		"command": command,
 	})
 
-	err := Self.Service.Exec(&command)
+	err := h.Service.Exec(&command)
 	if err != nil {
 		return err
 	}

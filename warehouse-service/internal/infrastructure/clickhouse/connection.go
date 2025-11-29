@@ -31,6 +31,6 @@ func NewClickHouseDB() *ClickHouseDB {
 	return &ClickHouseDB{session: conn, logger: logger}
 }
 
-func (Self *ClickHouseDB) GetSession() clickhouse.Conn {
-	return Self.session
+func (db *ClickHouseDB) GetSession() clickhouse.Conn {
+	return db.session
 }

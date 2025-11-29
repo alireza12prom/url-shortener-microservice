@@ -1,4 +1,4 @@
-package ValueObjects
+package valueobjects
 
 import (
 	"errors"

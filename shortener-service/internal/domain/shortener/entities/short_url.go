@@ -3,36 +3,36 @@ package entities
 import (
 	"time"
 
-	ValueObjects "github.com/shortener-service/internal/domain/shortener/value-objects"
+	"github.com/shortener-service/internal/domain/shortener/value-objects"
 )
 
 type ShortURL struct {
-	ID             *ValueObjects.ID
-	UserID         *ValueObjects.ID
-	Hash           *ValueObjects.Hash
+	ID             *valueobjects.ID
+	UserID         *valueobjects.ID
+	Hash           *valueobjects.Hash
 	IsActive       bool
-	Endpoint       *ValueObjects.Endpoint
+	Endpoint       *valueobjects.Endpoint
 	CreatedAt      time.Time
 	LastAccessedAt time.Time
 }
 
 func NewShortURL(id, userId, hash, endpoint string) (ShortURL, error) {
-	ID, err := ValueObjects.NewID(id)
+	ID, err := valueobjects.NewID(id)
 	if err != nil {
 		return ShortURL{}, err
 	}
 
-	UserID, err := ValueObjects.NewID(userId)
+	UserID, err := valueobjects.NewID(userId)
 	if err != nil {
 		return ShortURL{}, err
 	}
 
-	Hash, err := ValueObjects.NewHash(hash)
+	Hash, err := valueobjects.NewHash(hash)
 	if err != nil {
 		return ShortURL{}, err
 	}
 
-	Endpoint, err := ValueObjects.NewEndpoint(endpoint)
+	Endpoint, err := valueobjects.NewEndpoint(endpoint)
 	if err != nil {
 		return ShortURL{}, err
 	}

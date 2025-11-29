@@ -32,12 +32,12 @@ func NewKafkaConsumer(config *KafkaConsumerConfig) *KafkaListener {
 	}
 }
 
-func (Self *KafkaListener) Consume(handler func([]byte) error) error {
-	println("Starting Kafka listener on topic:", Self.config.Topic)
+func (l *KafkaListener) Consume(handler func([]byte) error) error {
+	println("Starting Kafka listener on topic:", l.config.Topic)
 	ctx := context.Background()
 
 	for {
-		m, err := Self.reader.ReadMessage(ctx)
+		m, err := l.reader.ReadMessage(ctx)
 		if err != nil {
 			println("Error fetching message:", err.Error())
 			return err
@@ -47,7 +47,7 @@ func (Self *KafkaListener) Consume(handler func([]byte) error) error {
 			println("Handler error:", err.Error())
 		}
 
-		if err := Self.reader.CommitMessages(ctx, m); err != nil {
+		if err := l.reader.CommitMessages(ctx, m); err != nil {
 			println("Failed to commit message:", err)
 		}
 	}

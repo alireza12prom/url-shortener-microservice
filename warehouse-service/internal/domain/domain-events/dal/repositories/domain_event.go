@@ -20,12 +20,12 @@ func NewDomainEventRepository(connection *clickhouse.ClickHouseDB) *DomainEventR
 	}
 }
 
-func (Self *DomainEventRepository) Save(entity *entities.DomainEventEntity) error {
+func (r *DomainEventRepository) Save(entity *entities.DomainEventEntity) error {
 	query := "INSERT INTO domain_events (id, name, context, payload, datetime, correlation_id) VALUES (?, ?, ?, ?, ?, ?)"
 
 	model := mappers.MapToAccountModel(entity)
 
-	err := Self.session.Exec(
+	err := r.session.Exec(
 		context.Background(),
 		query,
 		model.ID,

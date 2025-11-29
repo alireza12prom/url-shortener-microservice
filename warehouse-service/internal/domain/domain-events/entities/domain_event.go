@@ -3,16 +3,16 @@ package entities
 import (
 	"time"
 
-	ValueObjects "github.com/warehouse-service/internal/domain/domain-events/value-objects"
+	"github.com/warehouse-service/internal/domain/domain-events/value-objects"
 )
 
 type DomainEventEntity struct {
-	ID            *ValueObjects.ID
+	ID            *valueobjects.ID
 	Name          string
 	Context       string
 	Payload       any
 	DateTime      *time.Time
-	CorrelationID *ValueObjects.ID
+	CorrelationID *valueobjects.ID
 }
 
 func NewDomainEventEntity(
@@ -23,12 +23,12 @@ func NewDomainEventEntity(
 	correlationId string,
 	datetime string,
 ) (*DomainEventEntity, error) {
-	ID, err := ValueObjects.NewID(id)
+	ID, err := valueobjects.NewID(id)
 	if err != nil {
 		return nil, err
 	}
 
-	CorrelationID, err := ValueObjects.NewID(correlationId)
+	CorrelationID, err := valueobjects.NewID(correlationId)
 	if err != nil {
 		return nil, err
 	}
