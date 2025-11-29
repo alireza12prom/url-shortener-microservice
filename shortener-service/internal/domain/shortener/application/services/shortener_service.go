@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/google/uuid"
+	exceptions "github.com/shortener-service/internal/common/exceptions"
 	"github.com/shortener-service/internal/domain/shortener/application/commands"
 	"github.com/shortener-service/internal/domain/shortener/entities"
 	"github.com/shortener-service/internal/domain/shortener/events"
@@ -33,6 +34,16 @@ func (s *ShortenerService) ShortenCustom(command *commands.ShortenCustomCommand)
 	*commands.ShortenCustomCommandOutput,
 	error,
 ) {
+	existing, err := s.shortURLRepo.GetByHash(command.Hash)
+	if err != nil {
+		return nil, err
+	}
+	if existing != nil {
+		return nil, exceptions.NewBusinessException(exceptions.HashAlreadyExists, map[string]any{
+			"hash": command.Hash,
+		})
+	}
+
 	entity, err := entities.NewShortURL(
 		uuid.New().String(),
 		command.UserID,
@@ -42,8 +53,6 @@ func (s *ShortenerService) ShortenCustom(command *commands.ShortenCustomCommand)
 	if err != nil {
 		return nil, err
 	}
-
-	// TODO: check hash is unique
 
 	err = s.shortURLRepo.Save(&entity)
 	if err != nil {
@@ -64,21 +73,45 @@ func (s *ShortenerService) ShortenRandom(command *commands.ShortenRandomCommand)
 	*commands.ShortenRandomCommandOutput,
 	error,
 ) {
-	entity, err := entities.NewShortURL(
-		uuid.New().String(),
-		command.UserID,
-		s.hashReservationService.Reserve(command.Length),
-		command.Endpoint,
-	)
-	if err != nil {
-		return nil, err
+	const maxRetries = 10
+	var entity entities.ShortURL
+	var err error
+	var success bool
+
+	for attempt := 0; attempt < maxRetries; attempt++ {
+		hash := s.hashReservationService.Reserve(command.Length)
+
+		existing, err := s.shortURLRepo.GetByHash(hash)
+		if err != nil {
+			return nil, err
+		}
+		if existing != nil {
+			continue
+		}
+
+		entity, err = entities.NewShortURL(
+			uuid.New().String(),
+			command.UserID,
+			hash,
+			command.Endpoint,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		err = s.shortURLRepo.Save(&entity)
+		if err != nil {
+			return nil, err
+		}
+
+		success = true
+		break
 	}
 
-	// TODO: check hash is unique
-
-	err = s.shortURLRepo.Save(&entity)
-	if err != nil {
-		return nil, err
+	if !success {
+		return nil, exceptions.NewBusinessException(exceptions.HashAlreadyExists, map[string]any{
+			"message": "Failed to generate unique hash after multiple attempts",
+		})
 	}
 
 	err = s.eventPublisher.Publish(events.NewShortURLCreatedEvent(&entity))
