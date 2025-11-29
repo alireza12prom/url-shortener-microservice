@@ -5,7 +5,7 @@ import (
 	"github.com/shortener-service/internal/common/exceptions"
 	"github.com/shortener-service/internal/domain/redirector/dal/mappers"
 	"github.com/shortener-service/internal/domain/redirector/dal/models"
-	"github.com/shortener-service/internal/domain/redirector/domain/entities"
+	"github.com/shortener-service/internal/domain/redirector/entities"
 	"github.com/shortener-service/internal/infrastructure/scylladb"
 )
 

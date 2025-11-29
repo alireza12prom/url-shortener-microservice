@@ -5,7 +5,7 @@ import (
 	exceptions "github.com/shortener-service/internal/common/exceptions"
 	"github.com/shortener-service/internal/domain/shortener/application/commands"
 	"github.com/shortener-service/internal/domain/shortener/application/dto"
-	"github.com/shortener-service/internal/domain/shortener/domain/interfaces"
+	"github.com/shortener-service/internal/domain/shortener/interfaces"
 )
 
 type ShortenerHandler struct {

@@ -3,8 +3,8 @@ package services
 import (
 	"github.com/warehouse-service/internal/common/exceptions"
 	"github.com/warehouse-service/internal/domain/domain-events/application/commands"
-	"github.com/warehouse-service/internal/domain/domain-events/domain/entities"
-	"github.com/warehouse-service/internal/domain/domain-events/domain/interfaces"
+	"github.com/warehouse-service/internal/domain/domain-events/entities"
+	"github.com/warehouse-service/internal/domain/domain-events/interfaces"
 )
 
 type CaptureEventService struct {

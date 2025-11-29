@@ -5,7 +5,7 @@ import (
 	"github.com/shortener-service/internal/common/exceptions"
 	"github.com/shortener-service/internal/domain/redirector/application/commands"
 	"github.com/shortener-service/internal/domain/redirector/application/dto"
-	"github.com/shortener-service/internal/domain/redirector/domain/interfaces"
+	"github.com/shortener-service/internal/domain/redirector/interfaces"
 )
 
 type RedirectorHandler struct {

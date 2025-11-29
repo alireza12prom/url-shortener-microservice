@@ -4,21 +4,21 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/shortener-service/internal/domain/account/domain/entities"
+	"github.com/shortener-service/internal/domain/account/entities"
 	"github.com/shortener-service/internal/lib"
 )
 
-type UsernameChangedPayload struct {
+type LoginHappenedPayload struct {
 	ID       string `json:"id"`
 	Username string `json:"username"`
 }
 
-func NewUsernameChangedEvent(entity *entities.AccountEntity) *lib.Event {
+func NewLoginHappenedEvent(entity *entities.AccountEntity) *lib.Event {
 	return &lib.Event{
 		ID:      entity.ID.GetValue(),
-		Name:    "username_changed",
+		Name:    "login_happened",
 		Context: "account",
-		Payload: PasswordChangedPayload{
+		Payload: LoginHappenedPayload{
 			ID:       entity.ID.GetValue(),
 			Username: entity.Username.GetValue(),
 		},

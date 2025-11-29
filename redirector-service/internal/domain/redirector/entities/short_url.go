@@ -3,7 +3,7 @@ package entities
 import (
 	"time"
 
-	ValueObjects "github.com/shortener-service/internal/domain/redirector/domain/value-objects"
+	ValueObjects "github.com/shortener-service/internal/domain/redirector/value-objects"
 )
 
 type ShortURL struct {

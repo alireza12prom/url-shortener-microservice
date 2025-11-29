@@ -5,10 +5,10 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/shortener-service/internal/domain/shortener/application/commands"
-	"github.com/shortener-service/internal/domain/shortener/domain/entities"
-	"github.com/shortener-service/internal/domain/shortener/domain/events"
-	"github.com/shortener-service/internal/domain/shortener/domain/interfaces"
-	domain_services "github.com/shortener-service/internal/domain/shortener/domain/services"
+	"github.com/shortener-service/internal/domain/shortener/entities"
+	"github.com/shortener-service/internal/domain/shortener/events"
+	"github.com/shortener-service/internal/domain/shortener/interfaces"
+	domain_services "github.com/shortener-service/internal/domain/shortener/services"
 	"github.com/shortener-service/internal/lib"
 )
 

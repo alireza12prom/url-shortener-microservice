@@ -6,7 +6,7 @@ import (
 	ch "github.com/ClickHouse/clickhouse-go/v2"
 	"github.com/warehouse-service/internal/common/exceptions"
 	"github.com/warehouse-service/internal/domain/domain-events/dal/mappers"
-	"github.com/warehouse-service/internal/domain/domain-events/domain/entities"
+	"github.com/warehouse-service/internal/domain/domain-events/entities"
 	"github.com/warehouse-service/internal/infrastructure/clickhouse"
 )
 

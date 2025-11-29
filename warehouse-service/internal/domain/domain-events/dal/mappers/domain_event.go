@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/warehouse-service/internal/domain/domain-events/dal/models"
-	"github.com/warehouse-service/internal/domain/domain-events/domain/entities"
-	ValueObjects "github.com/warehouse-service/internal/domain/domain-events/domain/value-objects"
+	"github.com/warehouse-service/internal/domain/domain-events/entities"
+	ValueObjects "github.com/warehouse-service/internal/domain/domain-events/value-objects"
 )
 
 func MapToAccountModel(e *entities.DomainEventEntity) *models.DomainEventModel {

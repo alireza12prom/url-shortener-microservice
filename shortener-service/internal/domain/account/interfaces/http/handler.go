@@ -6,7 +6,7 @@ import (
 	"github.com/shortener-service/internal/domain/account/application/commands"
 	"github.com/shortener-service/internal/domain/account/application/dto"
 	"github.com/shortener-service/internal/domain/account/application/queries"
-	"github.com/shortener-service/internal/domain/account/domain/interfaces"
+	"github.com/shortener-service/internal/domain/account/interfaces"
 )
 
 type AccountHandler struct {

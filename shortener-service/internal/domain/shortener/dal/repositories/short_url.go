@@ -4,7 +4,7 @@ import (
 	"github.com/gocql/gocql"
 	"github.com/shortener-service/internal/common/exceptions"
 	"github.com/shortener-service/internal/domain/shortener/dal/mappers"
-	"github.com/shortener-service/internal/domain/shortener/domain/entities"
+	"github.com/shortener-service/internal/domain/shortener/entities"
 	"github.com/shortener-service/internal/infrastructure/scylladb"
 )
 

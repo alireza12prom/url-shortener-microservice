@@ -1,6 +1,6 @@
 package interfaces
 
-import "github.com/shortener-service/internal/domain/account/domain/entities"
+import "github.com/shortener-service/internal/domain/account/entities"
 
 type AccountRepository interface {
 	Save(account *entities.AccountEntity) error

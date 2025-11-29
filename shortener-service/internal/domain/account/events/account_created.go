@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/shortener-service/internal/domain/account/domain/entities"
+	"github.com/shortener-service/internal/domain/account/entities"
 	"github.com/shortener-service/internal/lib"
 )
 

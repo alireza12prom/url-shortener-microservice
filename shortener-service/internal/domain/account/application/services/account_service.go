@@ -8,9 +8,9 @@ import (
 	exceptions "github.com/shortener-service/internal/common/exceptions"
 	"github.com/shortener-service/internal/domain/account/application/commands"
 	"github.com/shortener-service/internal/domain/account/application/queries"
-	"github.com/shortener-service/internal/domain/account/domain/entities"
-	"github.com/shortener-service/internal/domain/account/domain/events"
-	"github.com/shortener-service/internal/domain/account/domain/interfaces"
+	"github.com/shortener-service/internal/domain/account/entities"
+	"github.com/shortener-service/internal/domain/account/events"
+	"github.com/shortener-service/internal/domain/account/interfaces"
 	"github.com/shortener-service/internal/infrastructure/jwt"
 	"github.com/shortener-service/internal/lib"
 )

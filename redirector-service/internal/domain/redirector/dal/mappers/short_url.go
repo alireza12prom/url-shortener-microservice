@@ -2,8 +2,8 @@ package mappers
 
 import (
 	"github.com/shortener-service/internal/domain/redirector/dal/models"
-	"github.com/shortener-service/internal/domain/redirector/domain/entities"
-	ValueObjects "github.com/shortener-service/internal/domain/redirector/domain/value-objects"
+	"github.com/shortener-service/internal/domain/redirector/entities"
+	ValueObjects "github.com/shortener-service/internal/domain/redirector/value-objects"
 )
 
 func MapToShortURLModel(e *entities.ShortURL) *models.ShortURLModel {

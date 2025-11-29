@@ -3,7 +3,7 @@ package entities
 import (
 	"time"
 
-	ValueObjects "github.com/warehouse-service/internal/domain/domain-events/domain/value-objects"
+	ValueObjects "github.com/warehouse-service/internal/domain/domain-events/value-objects"
 )
 
 type DomainEventEntity struct {

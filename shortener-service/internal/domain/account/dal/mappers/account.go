@@ -2,8 +2,8 @@ package mappers
 
 import (
 	"github.com/shortener-service/internal/domain/account/dal/models"
-	"github.com/shortener-service/internal/domain/account/domain/entities"
-	ValueObjects "github.com/shortener-service/internal/domain/account/domain/value-objects"
+	"github.com/shortener-service/internal/domain/account/entities"
+	ValueObjects "github.com/shortener-service/internal/domain/account/value-objects"
 )
 
 func MapToAccountModel(e *entities.AccountEntity) *models.AccountModel {
